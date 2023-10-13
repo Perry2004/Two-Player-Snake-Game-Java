@@ -7,7 +7,7 @@ import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
- * Represents the SnakeGame as a whole
+ * The class that contains the game state
  */
 public class Game {
     private static int TICKS_PER_SECOND;
@@ -23,6 +23,12 @@ public class Game {
     private int noEatCount1 = 0;
     private int noEatCount2 = 0;
 
+    /**
+     * REQUIRE: maxX and maxY are positive integers
+     * EFFECTS: constructs a new game with the given dimensions
+     * @param maxX the maximum width
+     * @param maxY the maximum height
+     */
     public Game(int maxX, int maxY) {
         this.maxX = maxX;
         this.maxY = maxY;
@@ -35,17 +41,26 @@ public class Game {
         food.add(generateRandomPosition());
     }
 
+    /**
+     * EFFECTS: returns the number of ticks per second (difficulty)
+     * @return the number of ticks per second
+     */
     public static int getTicksPerSecond() {
         return TICKS_PER_SECOND;
     }
 
+    /**
+     * REQUIRE: ticksPerSecond is a positive integer
+     * EFFECTS: sets the number of ticks per second (difficulty)
+     * @param ticksPerSecond the number of ticks per second
+     */
     public static void setTicksPerSecond(int ticksPerSecond) {
         TICKS_PER_SECOND = ticksPerSecond;
     }
 
     /**
-     * Progresses the game state, moving the snake, and handling
-     * food
+     * MODIFIES: this
+     * EFFECTS: moves the snakes, handles food and checks for collisions
      */
     public void tick() {
         updateAchievement();
@@ -67,8 +82,8 @@ public class Game {
     }
 
     /**
-     * Spawns a new food item into a valid
-     * position in the game
+     * MODIFIES: this
+     * EFFECTS: spawns a new food at a random position that is not occupied
      */
     public void spawnNewFood() {
         Position pos = generateRandomPosition();
@@ -91,24 +106,29 @@ public class Game {
     }
 
     /**
-     * Returns whether a given position is
-     * out of the game frame
+     * REQUIRE: pos != null
+     * EFFECTS: returns whether a given position is out of bounds
+     * @param pos the position
+     * @return  whether a given position is out of bounds
      */
     public boolean isOutOfBounds(Position pos) {
         return pos.getPosX() < 0 || pos.getPosY() < 0 || pos.getPosX() > maxX || pos.getPosY() > maxY;
     }
 
+
     /**
-     * Returns whether a given position is in bounds
-     * and not already occupied
+     * REQUIRE: pos != null
+     * EFFECTS: returns whether a given position is valid (not out of bounds, not occupied by food or snakes)
+     * @param pos the position
+     * @return whether a given position is valid
      */
     public boolean isValidPosition(Position pos) {
         return !isOutOfBounds(pos) && !food.contains(pos) && !snake1.hasCollided(pos) && !snake2.hasCollided(pos);
     }
 
     /**
-     * Checks for food that the snake has eaten,
-     * grows the snake and increases score if food is found
+     * MODIFIES: this
+     * EFFECTS: checks if the snakes eat the food and handles it accordingly
      */
     private void handleFood() {
         Position eatenFood = food.stream().filter(snake1::hasCollided).findFirst().orElse(null);
@@ -137,9 +157,10 @@ public class Game {
         food.remove(eatenFood);
     }
 
+
     /**
-     * Generates a random position.
-     * Guaranteed to be in bounds but not necessarily valid
+     * EFFECTS: generates a random position within the bounds of the game
+     * @return a random position within the bounds of the game
      */
     private Position generateRandomPosition() {
         return new Position(
@@ -147,6 +168,10 @@ public class Game {
                 ThreadLocalRandom.current().nextInt(maxY));
     }
 
+    /**
+     * MODIFIES: this
+     * EFFECTS: check whether the general achievements are fulfilled and adds them to the collection if they are
+     */
     public void updateAchievement() {
         if (noEatCount1 >= 1000) {
             achievements.addAchievement(new GeneralAchievement("The Survivor",
@@ -164,62 +189,126 @@ public class Game {
         }
     }
 
+    /**
+     * EFFECTS: returns the first snake
+     * @return the first snake
+     */
     public Snake getSnake1() {
         return snake1;
     }
 
+    /**
+     * EFFECTS: returns the second snake
+     * @return the second snake
+     */
     public Snake getSnake2() {
         return snake2;
     }
 
+    /**
+     * EFFECTS: returns the food
+     * @return the food
+     */
     public Set<Position> getFood() {
         return food;
     }
 
+    /**
+     * EFFECTS: returns the score of the first snake
+     * @return the score of the first snake
+     */
     public int getScore1() {
         return score1;
     }
 
+    /**
+     * MODIFIES: this
+     * EFFECTS: sets the score of the first snake
+     * @param score1 the score of the first snake
+     */
     public void setScore1(int score1) {
         this.score1 = score1;
     }
 
+    /**
+     * EFFECTS: returns the achievements
+     * @return the achievements
+     */
     public AchievementCollection getAchievements() {
         return achievements;
     }
 
+    /**
+     * EFFECTS: returns the score of the second snake
+     * @return the score of the second snake
+     */
     public int getScore2() {
         return score2;
     }
 
+    /**
+     * MODIFIES: this
+     * EFFECTS: sets the score of the second snake
+     * @param score2 the score of the second snake
+     */
     public void setScore2(int score2) {
         this.score2 = score2;
     }
 
+    /**
+     * EFFECTS: returns whether the game has ended
+     * @return whether the game has ended
+     */
     public boolean isEnded() {
         return ended;
     }
 
+    /**
+     * EFFECTS: returns the maximum width
+     * @return the maximum width
+     */
     public int getMaxX() {
         return maxX;
     }
 
+    /**
+     * EFFECTS: returns the maximum height
+     * @return the maximum height
+     */
     public int getMaxY() {
         return maxY;
     }
 
+    /**
+     * EFFECTS: returns the number of rounds without eating any apples or colliding for the first snake
+     * @return the number of rounds without eating any apples or colliding for the first snake
+     */
     public int getNoEatCount1() {
         return noEatCount1;
     }
 
+    /**
+     * MODIFIES: this
+     * EFFECTS: sets the number of rounds without eating any apples or colliding for the first snake
+     * @param noEatCount1 the number of rounds without eating any apples or colliding for the first snake
+     */
     public void setNoEatCount1(int noEatCount1) {
         this.noEatCount1 = noEatCount1;
     }
 
+    /**
+     * EFFECTS: returns the number of rounds without eating any apples or colliding for the second snake
+     * @return the number of rounds without eating any apples or colliding for the second snake
+     */
     public int getNoEatCount2() {
         return noEatCount2;
     }
 
+    /**
+     * MODIFIES: this
+     * EFFECTS: sets the number of rounds without eating any apples or colliding for the second snake
+     * @param noEatCount2 the number of rounds without eating any apples or colliding for the second snake
+     */
     public void setNoEatCount2(int noEatCount2) {
         this.noEatCount2 = noEatCount2;
     }

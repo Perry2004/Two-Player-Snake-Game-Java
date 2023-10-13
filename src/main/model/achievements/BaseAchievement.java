@@ -2,11 +2,23 @@ package model.achievements;
 
 import model.Snake;
 
+/**
+ * The abstract class for achievements that each achievement inherits from.
+ */
 public class BaseAchievement implements Achievement {
     private final String title;
     private final String description;
     private final Snake snake;
 
+    /**
+     * REQUIRES: title and description are non-empty strings, snake is a valid snake
+     * EFFECTS: constructs a new achievement with the given title, description, and
+     * snake
+     * 
+     * @param title       the title of the achievement
+     * @param description the description of the achievement
+     * @param snake       the snake that the achievement is associated with
+     */
     public BaseAchievement(String title, String description, Snake snake) {
         this.title = title;
         this.description = description;

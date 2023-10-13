@@ -1,8 +1,7 @@
 package model;
 
 /**
- * Represents a facing direction
- * in game
+ * The available directions in the game
  */
 public enum Direction {
     UP(0, -1),
@@ -10,21 +9,29 @@ public enum Direction {
     RIGHT(1, 0),
     LEFT(-1, 0);
 
-    private final int dx;
-    private final int dy;
+    private final int directX;
+    private final int directY;
 
-    Direction(int dx, int dy) {
-        this.dx = dx;
-        this.dy = dy;
+    /**
+     * REQUIRE: directX and directY are integers
+     * EFFECTS: constructs a new direction
+     * @param directX the offset in the x direction
+     * @param directY the offset in the y direction
+     */
+    Direction(int directX, int directY) {
+        this.directX = directX;
+        this.directY = directY;
     }
 
     /**
-     * Moves a position one increment
-     * in the facing direction
+     * REQUIRE: pos != null
+     * EFFECTS: returns the position that is one step in the direction of this direction
+     * @param pos the position
+     * @return the position that is one step in the direction of this direction
      */
     public Position move(Position pos) {
         return new Position(
-                pos.getPosX() + dx,
-                pos.getPosY() + dy);
+                pos.getPosX() + directX,
+                pos.getPosY() + directY);
     }
 }

@@ -4,11 +4,7 @@ import com.googlecode.lanterna.TerminalPosition;
 import com.googlecode.lanterna.TerminalSize;
 import com.googlecode.lanterna.TextColor;
 import com.googlecode.lanterna.graphics.TextGraphics;
-import com.googlecode.lanterna.gui2.LinearLayout;
 import com.googlecode.lanterna.gui2.MultiWindowTextGUI;
-import com.googlecode.lanterna.gui2.Panel;
-import com.googlecode.lanterna.gui2.ScrollBar;
-import com.googlecode.lanterna.gui2.TextBox;
 import com.googlecode.lanterna.gui2.WindowBasedTextGUI;
 import com.googlecode.lanterna.gui2.dialogs.MessageDialogBuilder;
 import com.googlecode.lanterna.gui2.dialogs.MessageDialogButton;
@@ -26,14 +22,20 @@ import model.achievements.GeneralAchievement;
 import java.io.IOException;
 import java.util.Scanner;
 
+/**
+ * The interface for the game. Handles user input and rendering.
+ */
 public class TerminalGame {
     private Game game;
     private Screen screen;
     private WindowBasedTextGUI endGui;
 
     /**
-     * Begins the game and method does not leave execution
-     * until game is complete.
+     * EFFECTS: Ask the user for the difficulty level and start the game
+     * MODIFIES: this
+     * 
+     * @throws IOException throws when the screen cannot be created
+     * @throws InterruptedException throws when the thread is interrupted
      */
     public void start() throws IOException, InterruptedException {
         int difficulty = 0;
@@ -67,8 +69,12 @@ public class TerminalGame {
     }
 
     /**
-     * Begins the game cycle. Ticks once every Game.TICKS_PER_SECOND until
-     * game has ended and the endGui has been exited.
+     * EFFECTS: start the game rounds. Moves the snakes and update stats. If the
+     * game is ended, print out all achievements.
+     * MODIFIES: this
+     * 
+     * @throws IOException throws when the screen cannot be created
+     * @throws InterruptedException throws when the thread is interrupted
      */
     private void beginTicks() throws IOException, InterruptedException {
         while (!game.isEnded() || endGui.getActiveWindow() != null) {
@@ -83,13 +89,20 @@ public class TerminalGame {
         }
         // check The Speedy achievement
         checkSpeedyAchievement();
-//        print out all achievements
+        // print out all achievements
         for (Achievement a : game.getAchievements().getAchievements()) {
             System.out.println(a);
         }
         System.exit(0);
     }
 
+    /**
+     * MODIFIES: this
+     * EFFECTS: check if any of the achievement is achieved. If so, add it to the
+     * achievement collection
+     * 
+     * @param snake the snake to check
+     */
     private void updateStepAchievement(Snake snake) {
         switch (snake.getDirection()) {
             case UP:
@@ -107,6 +120,11 @@ public class TerminalGame {
         }
     }
 
+    /**
+     * MODIFIES: this
+     * EFFECTS: check if the "The Speedy" achievement is achieved. If so, add it to
+     * the achievement collection
+     */
     private void checkSpeedyAchievement() {
         if (game.getAchievements().getAchievement("Total Rounds", game.getSnake1()).getValue() <= 10) {
             game.getAchievements().addAchievement(
@@ -117,8 +135,11 @@ public class TerminalGame {
     }
 
     /**
-     * Handles one cycle in the game by taking user input,
-     * ticking the game internally, and rendering the effects
+     * MODIFIES: this
+     * EFFECTS: runs a single round of the game. Handles user input and sets the
+     * snake's direction.
+     * 
+     * @throws IOException throws when the screen cannot be created
      */
     private void tick() throws IOException {
         handleUserInput();
@@ -134,8 +155,10 @@ public class TerminalGame {
     }
 
     /**
-     * Sets the snake's direction corresponding to the
-     * user's keystroke
+     * MODIFIES: this
+     * EFFECTS: sets the snake's direction based on user input
+     * 
+     * @throws IOException throws when the screen cannot be created
      */
     private void handleUserInput() throws IOException {
         KeyStroke stroke = screen.pollInput();
@@ -167,8 +190,11 @@ public class TerminalGame {
     }
 
     /**
-     * Returns the natural direction corresponding to the KeyType.
-     * Null if none found.
+     * EFFECTS: returns the direction corresponding to the given key. Arrow keys for
+     * snake 1, WASD for snake 2
+     * 
+     * @param key the key pressed by the user
+     * @return the direction corresponding to the given key
      */
     private Direction directionFrom(KeyStroke key) {
         KeyType type = key.getKeyType();
@@ -198,9 +224,8 @@ public class TerminalGame {
     }
 
     /**
-     * Renders the current screen.
-     * Draws the end screen if the game has ended, otherwise
-     * draws the score, snake, and food.
+     * MODIFIES: this
+     * EFFECTS: draws the game on the terminal using lanterna
      */
     private void render() {
         if (game.isEnded()) {
@@ -216,6 +241,10 @@ public class TerminalGame {
         drawFood();
     }
 
+    /**
+     * MODIFIES: this
+     * EFFECTS: draws the end screen using lanterna
+     */
     private void drawEndScreen() {
         endGui = new MultiWindowTextGUI(screen);
 
@@ -225,27 +254,12 @@ public class TerminalGame {
                 .addButton(MessageDialogButton.Close)
                 .build()
                 .showDialog(endGui);
-
-        // Create a scrollable text area to display achievements using lanterna
-        Panel panel = new Panel();
-        panel.setLayoutManager(new LinearLayout(com.googlecode.lanterna.gui2.Direction.VERTICAL));
-
-        // Create a scrollable text area
-        TextBox textArea = new TextBox();
-        textArea.setReadOnly(true);
-        textArea.setPreferredSize(new TerminalSize(50, 10));
-        textArea.setText(game.getAchievements().toString());
-
-        // Add the text area to the panel
-        panel.addComponent(textArea);
-
-        // Create a scroll pane and add the panel to it
-        ScrollBar scrollBar = new ScrollBar(com.googlecode.lanterna.gui2.Direction.VERTICAL);
-        scrollBar.setLayoutData(LinearLayout.createLayoutData(LinearLayout.Alignment.End));
-        scrollBar.addTo(panel);
-
     }
 
+    /**
+     * MODIFIES: this
+     * EFFECTS: draws the score on the terminal using lanterna
+     */
     private void drawScore() {
         TextGraphics text = screen.newTextGraphics();
         text.setForegroundColor(TextColor.ANSI.GREEN);
@@ -264,7 +278,10 @@ public class TerminalGame {
         text.putString(8, 1, String.valueOf(game.getScore2()));
     }
 
-
+    /**
+     * MODIFIES: this
+     * EFFECTS: draws the snake on the terminal using lanterna
+     */
     private void drawSnake() {
         Snake snake1 = game.getSnake1();
 
@@ -283,6 +300,10 @@ public class TerminalGame {
         }
     }
 
+    /**
+     * MODIFIES: this
+     * EFFECTS: draws the food on the terminal using lanterna
+     */
     private void drawFood() {
         for (Position food : game.getFood()) {
             drawPosition(food, TextColor.ANSI.RED, '#', false);
@@ -290,8 +311,14 @@ public class TerminalGame {
     }
 
     /**
-     * Draws a character in a given position on the terminal.
-     * If wide, it will draw the character twice to make it appear wide.
+     * MODIFIES: this
+     * EFFECTS: draws a position on the terminal using lanterna
+     * 
+     * @param pos   the position to draw
+     * @param color the color to draw the position in
+     * @param c     the character to draw
+     * @param wide  whether the character should be drawn as two characters wide
+     *              Private helper method for drawSnake and drawFood
      */
     private void drawPosition(Position pos, TextColor color, char c, boolean wide) {
         TextGraphics text = screen.newTextGraphics();

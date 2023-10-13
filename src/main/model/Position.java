@@ -3,21 +3,35 @@ package model;
 import java.util.Objects;
 
 /**
- * Represents a position in the game space.
+ * The immutable class that represents a position in the game
  */
 public class Position {
     private final int posX;
     private final int posY;
 
+    /**
+     * REQUIRE: x and y are positive integers
+     * EFFECTS: constructs a new position
+     * @param x the x coordinate
+     * @param y the y coordinate
+     */
     public Position(int x, int y) {
         this.posX = x;
         this.posY = y;
     }
 
+    /**
+     * EFFECTS: returns the x coordinate
+     * @return the x coordinate
+     */
     public int getPosX() {
         return posX;
     }
 
+    /**
+     * EFFECTS: returns the y coordinate
+     * @return the y coordinate
+     */
     public int getPosY() {
         return posY;
     }
