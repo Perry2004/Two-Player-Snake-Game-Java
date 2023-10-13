@@ -159,27 +159,62 @@ public class GameTest {
 
     @Test
     public void testCollideOrOutOfBound() {
-        // case 1: snake1 collide with self
+        // case 1: snake1 collide with self but snake2 is fine
         // first grow the snake to long enough, then go a circle and collide with self
         game = new Game(10, 10);
         Snake snake1 = game.getSnake1();
+        Snake snake2 = game.getSnake2();
         snake1.setDirection(Direction.RIGHT);
         for (int i = 0; i < 7; i++) {
             snake1.grow();
         }
         for (int i = 0; i < 10; i++) {
+            // set snake2 to the opposite of its original direction to avoid collision
+            switch (snake2.getDirection()) {
+                case UP:
+                    snake2.setDirection(Direction.DOWN);
+                    break;
+                case DOWN:
+                    snake2.setDirection(Direction.UP);
+                    break;
+                case LEFT:
+                    snake2.setDirection(Direction.RIGHT);
+                    break;
+                case RIGHT:
+                    snake2.setDirection(Direction.LEFT);
+                    break;
+                default:
+                    break;
+            }
             game.tick();
         }
         assertTrue(game.isEnded());
 
         // case 2: snake2 collide with self
         game = new Game(10, 10);
-        Snake snake2 = game.getSnake2();
+        snake1 = game.getSnake1();
+        snake2 = game.getSnake2();
         snake2.setDirection(Direction.RIGHT);
         for (int i = 0; i < 7; i++) {
             snake2.grow();
         }
         for (int i = 0; i < 10; i++) {
+            switch (snake1.getDirection()) {
+                case UP:
+                    snake1.setDirection(Direction.DOWN);
+                    break;
+                case DOWN:
+                    snake1.setDirection(Direction.UP);
+                    break;
+                case LEFT:
+                    snake1.setDirection(Direction.RIGHT);
+                    break;
+                case RIGHT:
+                    snake1.setDirection(Direction.LEFT);
+                    break;
+                default:
+                    break;
+            }
             game.tick();
         }
         assertTrue(game.isEnded());
@@ -187,17 +222,51 @@ public class GameTest {
         // case 3: snake1 out of bound
         game = new Game(10, 10);
         snake1 = game.getSnake1();
+        snake2 = game.getSnake2();
         snake1.setDirection(Direction.RIGHT);
         for (int i = 0; i < 10; i++) {
+            switch (snake2.getDirection()) {
+                case UP:
+                    snake2.setDirection(Direction.DOWN);
+                    break;
+                case DOWN:
+                    snake2.setDirection(Direction.UP);
+                    break;
+                case LEFT:
+                    snake2.setDirection(Direction.RIGHT);
+                    break;
+                case RIGHT:
+                    snake2.setDirection(Direction.LEFT);
+                    break;
+                default:
+                    break;
+            }
             game.tick();
         }
         assertTrue(game.isEnded());
 
         // case 4: snake2 out of bound
         game = new Game(10, 10);
+        snake1 = game.getSnake1();
         snake2 = game.getSnake2();
         snake2.setDirection(Direction.RIGHT);
         for (int i = 0; i < 10; i++) {
+            switch (snake1.getDirection()) {
+                case UP:
+                    snake1.setDirection(Direction.DOWN);
+                    break;
+                case DOWN:
+                    snake1.setDirection(Direction.UP);
+                    break;
+                case LEFT:
+                    snake1.setDirection(Direction.RIGHT);
+                    break;
+                case RIGHT:
+                    snake1.setDirection(Direction.LEFT);
+                    break;
+                default:
+                    break;
+            }
             game.tick();
         }
 
