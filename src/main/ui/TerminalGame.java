@@ -70,6 +70,7 @@ public class TerminalGame {
      * Begins the game cycle. Ticks once every Game.TICKS_PER_SECOND until
      * game has ended and the endGui has been exited.
      */
+    @SuppressWarnings("methodlength")
     private void beginTicks() throws IOException, InterruptedException {
         while (!game.isEnded() || endGui.getActiveWindow() != null) {
             tick();
@@ -272,27 +273,28 @@ public class TerminalGame {
         text.putString(8, 1, String.valueOf(game.getScore2()));
     }
 
+
     private void drawSnake() {
         Snake snake1 = game.getSnake1();
 
-        drawPosition(snake1.getHead(), TextColor.ANSI.GREEN, '\u2588', true);
+        drawPosition(snake1.getHead(), TextColor.ANSI.GREEN, '*', true);
 
         for (Position pos : snake1.getBody()) {
-            drawPosition(pos, TextColor.ANSI.GREEN, '\u2588', true);
+            drawPosition(pos, TextColor.ANSI.GREEN, '+', true);
         }
 
         Snake snake2 = game.getSnake2();
 
-        drawPosition(snake2.getHead(), TextColor.ANSI.BLUE, '\u2588', true);
+        drawPosition(snake2.getHead(), TextColor.ANSI.BLUE, '*', true);
 
         for (Position pos : snake2.getBody()) {
-            drawPosition(pos, TextColor.ANSI.BLUE, '\u2588', true);
+            drawPosition(pos, TextColor.ANSI.BLUE, '+', true);
         }
     }
 
     private void drawFood() {
         for (Position food : game.getFood()) {
-            drawPosition(food, TextColor.ANSI.RED, '\u2B24', false);
+            drawPosition(food, TextColor.ANSI.RED, '#', false);
         }
     }
 
