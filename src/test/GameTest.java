@@ -61,7 +61,8 @@ public class GameTest {
 
     @Test
     public void testTickOutOfBound() {
-        assertTrue(game.isOutOfBounds(new Position(-1, -2)));
+        assertTrue(game.isOutOfBounds(new Position(-1, 2)));
+        assertTrue(game.isOutOfBounds(new Position(1, -1)));
         assertTrue(game.isOutOfBounds(new Position(6, 7)));
         assertFalse(game.isOutOfBounds(new Position(0, 0)));
         assertTrue(game.isOutOfBounds(new Position(3, 7)));
@@ -156,18 +157,106 @@ public class GameTest {
         assertEquals(18, game.getAchievements().getAchievements().size());
     }
 
-@Test
-public void testGameEndsWhenSnakesCollideOrGoOutOfBounds() {
-    Game game = new Game(10, 10);
-    Snake snake1 = game.getSnake1();
-    Snake snake2 = game.getSnake2();
-    snake1.setDirection(Direction.DOWN);
-    snake2.setDirection(Direction.LEFT);
-    // keep moving the snakes until they collide
-    while (!game.isEnded()) {
+    @Test
+    public void testCollideOrOutOfBound() {
+        // case 1: snake1 collide with self
+        // first grow the snake to long enough, then go a circle and collide with self
+        game = new Game(10, 10);
+        Snake snake1 = game.getSnake1();
+        snake1.setDirection(Direction.RIGHT);
+        for (int i = 0; i < 7; i++) {
+            snake1.grow();
+        }
+        for (int i = 0; i < 10; i++) {
+            game.tick();
+        }
+        assertTrue(game.isEnded());
+
+        // case 2: snake2 collide with self
+        game = new Game(10, 10);
+        Snake snake2 = game.getSnake2();
+        snake2.setDirection(Direction.RIGHT);
+        for (int i = 0; i < 7; i++) {
+            snake2.grow();
+        }
+        for (int i = 0; i < 10; i++) {
+            game.tick();
+        }
+        assertTrue(game.isEnded());
+
+        // case 3: snake1 out of bound
+        game = new Game(10, 10);
+        snake1 = game.getSnake1();
+        snake1.setDirection(Direction.RIGHT);
+        for (int i = 0; i < 10; i++) {
+            game.tick();
+        }
+        assertTrue(game.isEnded());
+
+        // case 4: snake2 out of bound
+        game = new Game(10, 10);
+        snake2 = game.getSnake2();
+        snake2.setDirection(Direction.RIGHT);
+        for (int i = 0; i < 10; i++) {
+            game.tick();
+        }
+
+        // case 5: snake1 collide with snake2
+        game = new Game(10, 10);
+        snake1 = game.getSnake1();
+        snake2 = game.getSnake2();
+        snake1.setDirection(Direction.DOWN);
+        snake2.setDirection(Direction.UP);
+        for (int i = 0; i < 4; i++) {
+            game.tick();
+        }
+        assertTrue(game.isEnded());
+
+        // case 6: snake 1 collide with snake2, but snake2 does not collide with snake1
+        game = new Game(10, 10);
+        snake1 = game.getSnake1();
+        snake2 = game.getSnake2();
+        snake1.setDirection(Direction.DOWN);
+        snake2.setDirection(Direction.UP);
         game.tick();
+
+        snake1.setDirection(Direction.RIGHT);
+        snake2.setDirection(Direction.RIGHT);
+        for (int i = 0; i < 7; i++) {
+            snake1.grow();
+            game.tick();
+        }
+        snake1.setDirection(Direction.DOWN);
+        snake2.setDirection(Direction.UP);
+        game.tick();
+        snake1.setDirection(Direction.LEFT);
+        for (int i = 0; i < 5; i++) {
+            game.tick();
+        }
+        assertTrue(game.isEnded());
+
+        // case 7: snake 2 collide with snake1, but snake1 does not collide with snake2
+        game = new Game(10, 10);
+        snake1 = game.getSnake1();
+        snake2 = game.getSnake2();
+        snake1.setDirection(Direction.DOWN);
+        snake2.setDirection(Direction.UP);
+        game.tick();
+
+        snake1.setDirection(Direction.RIGHT);
+        snake2.setDirection(Direction.RIGHT);
+        for (int i = 0; i < 7; i++) {
+            snake2.grow();
+            game.tick();
+        }
+        snake1.setDirection(Direction.DOWN);
+        snake2.setDirection(Direction.UP);
+        game.tick();
+        snake2.setDirection(Direction.LEFT);
+        for (int i = 0; i < 5; i++) {
+            game.tick();
+        }
+        assertTrue(game.isEnded());
     }
-    // assert that the game has ended
-    assertTrue(game.isEnded());
-}
+
 }

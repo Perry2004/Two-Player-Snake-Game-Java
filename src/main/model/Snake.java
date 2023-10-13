@@ -87,4 +87,8 @@ public class Snake {
         return direction;
     }
 
+    public void setHead(Position head) {
+        this.head = head;
+    }
+
 }
