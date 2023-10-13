@@ -70,59 +70,50 @@ public class TerminalGame {
      * Begins the game cycle. Ticks once every Game.TICKS_PER_SECOND until
      * game has ended and the endGui has been exited.
      */
-    @SuppressWarnings("methodlength")
     private void beginTicks() throws IOException, InterruptedException {
         while (!game.isEnded() || endGui.getActiveWindow() != null) {
             tick();
             // update round achievements
-            game.getAchievements().getAchievement("Total Rounds").updateValue(1);
-            game.getAchievements().getAchievement("Total Rounds").updateValue(1);
+            game.getAchievements().getAchievement("Total Rounds", game.getSnake1()).updateValue(1);
+            game.getAchievements().getAchievement("Total Rounds", game.getSnake2()).updateValue(1);
             // update step for different directions
-            switch (game.getSnake1().getDirection()) {
-                case UP:
-                    game.getAchievements().getAchievement("Step Upwards").updateValue(1);
-                    break;
-                case DOWN:
-                    game.getAchievements().getAchievement("Step Downwards").updateValue(1);
-                    break;
-                case LEFT:
-                    game.getAchievements().getAchievement("Step Leftwards").updateValue(1);
-                    break;
-                case RIGHT:
-                    game.getAchievements().getAchievement("Step Rightwards").updateValue(1);
-                    break;
-            }
-            switch (game.getSnake2().getDirection()) {
-                case UP:
-                    game.getAchievements().getAchievement("Step Upwards").updateValue(1);
-                    break;
-                case DOWN:
-                    game.getAchievements().getAchievement("Step Downwards").updateValue(1);
-                    break;
-                case LEFT:
-                    game.getAchievements().getAchievement("Step Leftwards").updateValue(1);
-                    break;
-                case RIGHT:
-                    game.getAchievements().getAchievement("Step Rightwards").updateValue(1);
-                    break;
-            }
+            updateStepAchevement(game.getSnake1());
+            updateStepAchevement(game.getSnake2());
             Thread.sleep(1000L / Game.getTicksPerSecond());
         }
-
         // check The Speedy achievement
-        if (game.getAchievements().getAchievement("Total Rounds").getValue() <= 10) {
+        checkSpeedyAchievement();
+//        print out all achievements
+        for (Achievement a : game.getAchievements().getAchievements()) {
+            System.out.println(a);
+        }
+        System.exit(0);
+    }
+
+    private void updateStepAchevement(Snake snake) {
+        switch (snake.getDirection()) {
+            case UP:
+                game.getAchievements().getAchievement("Step Upwards", snake).updateValue(1);
+                break;
+            case DOWN:
+                game.getAchievements().getAchievement("Step Downwards", snake).updateValue(1);
+                break;
+            case LEFT:
+                game.getAchievements().getAchievement("Step Leftwards", snake).updateValue(1);
+                break;
+            case RIGHT:
+                game.getAchievements().getAchievement("Step Rightwards", snake).updateValue(1);
+                break;
+        }
+    }
+
+    private void checkSpeedyAchievement() {
+        if (game.getAchievements().getAchievement("Total Rounds", game.getSnake1()).getValue() <= 10) {
             game.getAchievements().addAchievement(
                     new GeneralAchievement("The Speedy", "Finish the game in less than 20 rounds", game.getSnake1()));
             game.getAchievements().addAchievement(
                     new GeneralAchievement("The Speedy", "Finish the game in less than 20 rounds", game.getSnake2()));
         }
-
-        // testing achievement
-        for (Achievement a : game.getAchievements().getAchievements()) {
-            System.out.println(a);
-        }
-
-        System.exit(0);
     }
 
     /**
@@ -164,14 +155,14 @@ public class TerminalGame {
                 || stroke.getKeyType() == KeyType.ArrowRight || stroke.getKeyType() == KeyType.ArrowLeft) {
             game.getSnake1().setDirection(dir);
             // update key stroke stat
-            game.getAchievements().getAchievement("Key Stroke").updateValue(1);
+            game.getAchievements().getAchievement("Key Stroke", game.getSnake1()).updateValue(1);
         } else if (stroke.getKeyType() == KeyType.Character && stroke.getCharacter() == 'w'
                 || stroke.getKeyType() == KeyType.Character && stroke.getCharacter() == 'a'
                 || stroke.getKeyType() == KeyType.Character && stroke.getCharacter() == 's'
                 || stroke.getKeyType() == KeyType.Character && stroke.getCharacter() == 'd') {
             game.getSnake2().setDirection(dir);
             // update key stroke stat
-            game.getAchievements().getAchievement("Key Stroke").updateValue(1);
+            game.getAchievements().getAchievement("Key Stroke", game.getSnake2()).updateValue(1);
         }
     }
 

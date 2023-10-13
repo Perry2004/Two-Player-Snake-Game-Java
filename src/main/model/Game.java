@@ -121,15 +121,15 @@ public class Game {
             snake1.grow();
             noEatCount1 = 0;
             noEatCount1++;
-            this.achievements.getAchievement("Apples Eaten")
-                    .updateValue(achievements.getAchievement("Apples Eaten").getValue() + 1);
+            this.achievements.getAchievement("Apples Eaten", snake1)
+                    .updateValue(achievements.getAchievement("Apples Eaten", snake1).getValue() + 1);
         } else if (snake2.hasCollided(eatenFood)) {
             score2++;
             snake2.grow();
             noEatCount2 = 0;
             noEatCount1++;
-            achievements.getAchievement("Apples Eaten")
-                    .updateValue(achievements.getAchievement("Apples Eaten").getValue() + 1);
+            achievements.getAchievement("Apples Eaten", snake2)
+                    .updateValue(achievements.getAchievement("Apples Eaten", snake2).getValue() + 1);
         } else {
             noEatCount1++;
             noEatCount2++;

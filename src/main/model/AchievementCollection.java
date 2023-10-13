@@ -41,9 +41,9 @@ public class AchievementCollection {
         return this.achievements;
     }
 
-    public Achievement getAchievement(String title) {
+    public Achievement getAchievement(String title, Snake snake) {
         for (Achievement achievement : this.achievements) {
-            if (achievement.getTitle().equals(title)) {
+            if (achievement.getTitle().equals(title) && achievement.getSnake().equals(snake)) {
                 return achievement;
             }
         }

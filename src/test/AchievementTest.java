@@ -33,8 +33,8 @@ public class AchievementTest {
     @Test
     public void testGetNoExistingAchievement() {
         ac.addAchievement(a1);
-        assertEquals(a1, ac.getAchievement("a1"));
-        assertNull(ac.getAchievement("a2"));
+        assertEquals(a1, ac.getAchievement("a1", snake1));
+        assertNull(ac.getAchievement("a2", snake1));
     }
 
     @Test
