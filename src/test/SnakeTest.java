@@ -100,4 +100,10 @@ public class SnakeTest {
         snake.setDirection(Direction.DOWN);
         assertEquals(Direction.DOWN, snake.getDirection());
     }
+
+    @Test
+    public void testSetHead() {
+        snake.setHead(new Position(2, 2));
+        assertEquals(new Position(2, 2), snake.getHead());
+    }
 }
