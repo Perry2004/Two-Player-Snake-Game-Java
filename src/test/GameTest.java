@@ -167,9 +167,6 @@ public class GameTest {
         snake1.setDirection(Direction.RIGHT);
         for (int i = 0; i < 7; i++) {
             snake1.grow();
-        }
-        for (int i = 0; i < 10; i++) {
-            // set snake2 to the opposite of its original direction to avoid collision
             switch (snake2.getDirection()) {
                 case UP:
                     snake2.setDirection(Direction.DOWN);
@@ -188,6 +185,16 @@ public class GameTest {
             }
             game.tick();
         }
+        snake1.setDirection(Direction.DOWN);
+        snake2.setDirection(Direction.UP);
+        game.tick();
+        snake1.setDirection(Direction.LEFT);
+        snake2.setDirection(Direction.DOWN);
+        game.tick();
+        snake1.setDirection(Direction.UP);
+        snake2.setDirection(Direction.UP);
+        game.tick();
+        
         assertTrue(game.isEnded());
 
         // case 2: snake2 collide with self
@@ -197,8 +204,6 @@ public class GameTest {
         snake2.setDirection(Direction.RIGHT);
         for (int i = 0; i < 7; i++) {
             snake2.grow();
-        }
-        for (int i = 0; i < 10; i++) {
             switch (snake1.getDirection()) {
                 case UP:
                     snake1.setDirection(Direction.DOWN);
@@ -217,6 +222,15 @@ public class GameTest {
             }
             game.tick();
         }
+        snake1.setDirection(Direction.DOWN);
+        snake2.setDirection(Direction.UP);
+        game.tick();
+        snake1.setDirection(Direction.UP);
+        snake2.setDirection(Direction.LEFT);
+        game.tick();
+        snake1.setDirection(Direction.DOWN);
+        snake2.setDirection(Direction.DOWN);
+        game.tick();
         assertTrue(game.isEnded());
 
         // case 3: snake1 out of bound
