@@ -25,7 +25,7 @@ the play time, and the number of achievements the player has achieved.
 
 ## List of Achievements
 - Events
-  1. The Chosen One: The apple attemps to spawn inside a snake's body. 
+  1. The Chosen One: The apple attempts to spawn inside a snake's body. 
   2. The Survivor: Survive for 1000 rounds without eating any apples or colliding. 
   3. The Eater: Eat 100 apples in total.
   4. The Speedy: Finish the game in less than 20 rounds.

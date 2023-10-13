@@ -77,8 +77,8 @@ public class TerminalGame {
             game.getAchievements().getAchievement("Total Rounds", game.getSnake1()).updateValue(1);
             game.getAchievements().getAchievement("Total Rounds", game.getSnake2()).updateValue(1);
             // update step for different directions
-            updateStepAchevement(game.getSnake1());
-            updateStepAchevement(game.getSnake2());
+            updateStepAchievement(game.getSnake1());
+            updateStepAchievement(game.getSnake2());
             Thread.sleep(1000L / Game.getTicksPerSecond());
         }
         // check The Speedy achievement
@@ -90,7 +90,7 @@ public class TerminalGame {
         System.exit(0);
     }
 
-    private void updateStepAchevement(Snake snake) {
+    private void updateStepAchievement(Snake snake) {
         switch (snake.getDirection()) {
             case UP:
                 game.getAchievements().getAchievement("Step Upwards", snake).updateValue(1);

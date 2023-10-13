@@ -82,6 +82,11 @@ public class SnakeTest {
     public void testHasCollided() {
         Position pos = new Position(1, 1);
         assertTrue(snake.hasCollided(pos));
+        snake.grow();
+        snake.move();
+        snake.grow();
+        snake.move();
+        assertTrue(snake.hasCollided(new Position(2, 1)));
     }
 
     @Test

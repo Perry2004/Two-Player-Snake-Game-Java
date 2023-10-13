@@ -55,8 +55,12 @@ public class AchievementTest {
         a1 = new GeneralAchievement("a1", "a1", snake1);
         a2 = new StatisticalAchievement("a2", "a2", snake1, 1);
         Achievement a3 = new GeneralAchievement("a1", "a1", snake1);
+        Achievement a4 = new GeneralAchievement("a1", "different", snake1);
+        Achievement a5 = new GeneralAchievement("a1", "a1", new Snake(0, 0, "different"));
         assertTrue(a1.equals(a3));
         assertFalse(a1.equals(a2));
+        assertFalse(a1.equals(a4));
+        assertFalse(a1.equals(a5));
     }
 
     @Test

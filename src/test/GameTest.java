@@ -10,6 +10,7 @@ import model.Direction;
 
 import model.Game;
 import model.Position;
+import model.Snake;
 
 public class GameTest {
     private Game game;
@@ -59,13 +60,13 @@ public class GameTest {
     }
 
     @Test
-    public void testTickOutOfBounds() {
-        game.tick();
-        game.tick();
-        game.tick();
-        game.tick();
-        game.tick();
-        assertTrue(game.isEnded());
+    public void testTickOutOfBound() {
+        assertTrue(game.isOutOfBounds(new Position(-1, -2)));
+        assertTrue(game.isOutOfBounds(new Position(6, 7)));
+        assertFalse(game.isOutOfBounds(new Position(0, 0)));
+        assertTrue(game.isOutOfBounds(new Position(3, 7)));
+        assertTrue(game.isOutOfBounds(new Position(7, 2)));
+        assertFalse(game.isOutOfBounds(new Position(2, 2)));
     }
 
     @Test
@@ -154,4 +155,19 @@ public class GameTest {
         game.updateAchievement();
         assertEquals(18, game.getAchievements().getAchievements().size());
     }
+
+@Test
+public void testGameEndsWhenSnakesCollideOrGoOutOfBounds() {
+    Game game = new Game(10, 10);
+    Snake snake1 = game.getSnake1();
+    Snake snake2 = game.getSnake2();
+    snake1.setDirection(Direction.DOWN);
+    snake2.setDirection(Direction.LEFT);
+    // keep moving the snakes until they collide
+    while (!game.isEnded()) {
+        game.tick();
+    }
+    // assert that the game has ended
+    assertTrue(game.isEnded());
+}
 }
