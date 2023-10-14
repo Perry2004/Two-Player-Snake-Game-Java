@@ -34,3 +34,5 @@ the play time, and the number of achievements the player has achieved.
   2. Steps in each direction: The number of steps the player has made in each direction.
   3. Total rounds: The total number of rounds the player has played.
   4. Eaten apples: The number of apples the player has eaten.
+## Citations 
+1. [SnakeConsole-Lanterna](https://github.students.cs.ubc.ca/CPSC210/SnakeConsole-Lanterna)
