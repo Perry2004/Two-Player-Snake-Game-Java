@@ -57,6 +57,9 @@ public class Position implements JSONizable{
         return Objects.hash(posX, posY);
     }
 
+    /**
+     * EFFECTS: returns the position as a JSON object
+     */
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
         json.put("posX", posX);

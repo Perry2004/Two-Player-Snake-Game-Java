@@ -9,7 +9,8 @@ import model.achievements.StatisticalAchievement;
 import persistence.JSONizable;
 
 /**
- * AchievementCollection is a collection of achievements that can be earned by the player.
+ * AchievementCollection is a collection of achievements that can be earned by
+ * the player.
  * It provides methods to add unique achievements and get achievements.
  */
 public class AchievementCollection implements JSONizable {
@@ -17,7 +18,9 @@ public class AchievementCollection implements JSONizable {
 
     /**
      * REQUIRE: snake is a valid snake
-     * EFFECTS: constructs a new achievement collection, initiates the statistical achievements
+     * EFFECTS: constructs a new achievement collection, initiates the statistical
+     * achievements
+     * 
      * @param snake1 the first snake
      * @param snake2 the second snake
      */
@@ -28,7 +31,9 @@ public class AchievementCollection implements JSONizable {
 
     /**
      * REQUIRE: snake1 != null && snake2 != null
-     * EFFECTS: sets up the statistical achievements for the given snakes. Initializes the values to 0.
+     * EFFECTS: sets up the statistical achievements for the given snakes.
+     * Initializes the values to 0.
+     * 
      * @param snake1 the first snake
      * @param snake2 the second snake
      */
@@ -39,7 +44,9 @@ public class AchievementCollection implements JSONizable {
 
     /**
      * REQUIRE: snake != null
-     * EFFECTS: sets up the statistical achievements for the given snake. Initializes the values to 0.
+     * EFFECTS: sets up the statistical achievements for the given snake.
+     * Initializes the values to 0.
+     * 
      * @param snake the snake
      */
     private void setUpStats(Snake snake) {
@@ -54,7 +61,9 @@ public class AchievementCollection implements JSONizable {
 
     /**
      * REQUIRES: achievement != null
-     * EFFECTS: adds the given achievement to the collection if it is not already in the collection
+     * EFFECTS: adds the given achievement to the collection if it is not already in
+     * the collection
+     * 
      * @param achievement the achievement to be added
      * @return true if the achievement was added, false otherwise
      */
@@ -68,6 +77,7 @@ public class AchievementCollection implements JSONizable {
 
     /**
      * EFFECTS: returns the achievements in the collection
+     * 
      * @return the achievements in the collection
      */
     public ArrayList<Achievement> getAchievements() {
@@ -76,10 +86,13 @@ public class AchievementCollection implements JSONizable {
 
     /**
      * REQUIRES: title != null && snake != null
-     * EFFECTS: returns the achievement with the given title and snake, null if it does not exist
+     * EFFECTS: returns the achievement with the given title and snake, null if it
+     * does not exist
+     * 
      * @param title the title of the achievement
      * @param snake the snake of the achievement
-     * @return the achievement with the given title and snake, null if it does not exist
+     * @return the achievement with the given title and snake, null if it does not
+     *         exist
      */
     public Achievement getAchievement(String title, Snake snake) {
         for (Achievement achievement : this.achievements) {
@@ -102,7 +115,8 @@ public class AchievementCollection implements JSONizable {
     }
 
     /**
-     * EFFECTS: returns the JSON representation of the achievement collection
+     * EFFECTS: returns the JSON representation of the achievement collection that
+     * contains the JSON representation of each achievement
      */
     public JSONObject toJson() {
         JSONObject json = new JSONObject();

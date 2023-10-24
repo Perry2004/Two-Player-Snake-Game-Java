@@ -18,7 +18,7 @@ public class Snake implements JSONizable {
     // current facing direction
     private Direction direction;
     // the last position that was removed as a result of moving
-    private Position lastRemoved;
+    private Position lastRemoved = new Position(0, 0);
     private final String name;
     private int numApplesEaten;
 
@@ -170,6 +170,15 @@ public class Snake implements JSONizable {
         json.put("name", name);
         json.put("numApplesEaten", numApplesEaten);
         return json;
+    }
+
+    /**
+     * MODIFIES: this
+     * EFFECTS: sets the last removed position - for loading purposes
+     * @param position the last removed position
+     */
+    public void setLastRemoved(Position position) {
+        this.lastRemoved = position;
     }
 
 }

@@ -40,6 +40,10 @@ public class StatisticalAchievement extends BaseAchievement {
         this.value += value;
     }
 
+    public void setValue(double value) {
+        this.value = value;
+    }
+
     public String toString() {
         return this.getTitle() + "\n\t" + this.getDescription() + " => " + this.getValue() + "\n\tBelongs to: "
                 + this.getSnake().getName();
@@ -53,7 +57,7 @@ public class StatisticalAchievement extends BaseAchievement {
         JSONObject json = new JSONObject();
         json.put("title", this.getTitle());
         json.put("description", this.getDescription());
-        json.put("snake", this.getSnake().toJson());
+        json.put("snake", this.getSnake().getName());
         json.put("value", this.getValue());
         return json;
     }

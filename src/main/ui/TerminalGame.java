@@ -4,7 +4,6 @@ import com.googlecode.lanterna.TerminalPosition;
 import com.googlecode.lanterna.TerminalSize;
 import com.googlecode.lanterna.TextColor;
 import com.googlecode.lanterna.graphics.TextGraphics;
-import com.googlecode.lanterna.gui2.Button;
 import com.googlecode.lanterna.gui2.MultiWindowTextGUI;
 import com.googlecode.lanterna.gui2.WindowBasedTextGUI;
 import com.googlecode.lanterna.gui2.dialogs.MessageDialogBuilder;
@@ -21,11 +20,8 @@ import model.achievements.Achievement;
 import model.achievements.GeneralAchievement;
 import persistence.JSONSaver;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.Scanner;
-
-import org.json.JSONObject;
 
 /**
  * The interface for the game. Handles user input and rendering.
@@ -35,6 +31,7 @@ public class TerminalGame {
     private Screen screen;
     private WindowBasedTextGUI endGui;
     private WindowBasedTextGUI pauseGui;
+    private Scanner scanner;
 
     /**
      * EFFECTS: Ask the user for the difficulty level and start the game
@@ -44,11 +41,34 @@ public class TerminalGame {
      * @throws InterruptedException throws when the thread is interrupted
      */
     public void start() throws IOException, InterruptedException {
-        int difficulty = 0;
-        try (Scanner scanner = new Scanner(System.in)) {
+
+        // ask if the user wants to load a game
+        scanner = new Scanner(System.in);
+        boolean load = false;
+        System.out.println("Do you want to load a game? (y/n)");
+        while (true) {
+            String input = scanner.nextLine();
+            if (input.equals("y")) {
+                load = true;
+                break;
+            } else if (input.equals("n")) {
+                break;
+            }
+        }
+
+        if (!load) {
+            int difficulty = 0;
             System.out.println("Please enter the difficulty level (1-3): ");
             while (difficulty < 1 || difficulty > 3) {
                 difficulty = scanner.nextInt();
+            }
+
+            if (difficulty == 1) {
+                Game.setTicksPerSecond(5);
+            } else if (difficulty == 2) {
+                Game.setTicksPerSecond(10);
+            } else {
+                Game.setTicksPerSecond(15);
             }
         }
 
@@ -63,12 +83,8 @@ public class TerminalGame {
                 // first row is reserved
                 terminalSize.getRows() - 2);
 
-        if (difficulty == 1) {
-            Game.setTicksPerSecond(5);
-        } else if (difficulty == 2) {
-            Game.setTicksPerSecond(10);
-        } else {
-            Game.setTicksPerSecond(15);
+        if (load) {
+            persistence.JSONLoader.loadGame("data/save1.json", game, game.getSnake1(), game.getSnake2());
         }
 
         beginTicks();
@@ -288,6 +304,7 @@ public class TerminalGame {
                 .build()
                 .showDialog(pauseGui).equals(MessageDialogButton.Yes)) {
             JSONSaver.saveGame("data/save1.json", game);
+            game.endGame();
         }
 
     }

@@ -25,11 +25,11 @@ public class Game implements JSONizable {
     private boolean ended = false;
     private int noEatCount1 = 0;
     private int noEatCount2 = 0;
-    private boolean paused = false;
 
     /**
      * REQUIRE: maxX and maxY are positive integers
      * EFFECTS: constructs a new game with the given dimensions
+     * 
      * @param maxX the maximum width
      * @param maxY the maximum height
      */
@@ -47,6 +47,7 @@ public class Game implements JSONizable {
 
     /**
      * EFFECTS: returns the number of ticks per second (difficulty)
+     * 
      * @return the number of ticks per second
      */
     public static int getTicksPerSecond() {
@@ -56,6 +57,7 @@ public class Game implements JSONizable {
     /**
      * REQUIRE: ticksPerSecond is a positive integer
      * EFFECTS: sets the number of ticks per second (difficulty)
+     * 
      * @param ticksPerSecond the number of ticks per second
      */
     public static void setTicksPerSecond(int ticksPerSecond) {
@@ -71,9 +73,13 @@ public class Game implements JSONizable {
         snake1.move();
         snake2.move();
 
-        if (snake1.hasCollidedWithSelf() || isOutOfBounds(snake1.getHead()) || snake2.hasCollidedWithSelf()
-                || isOutOfBounds(snake2.getHead()) || snake1.hasCollided(snake2.getHead())
+        if (snake1.hasCollidedWithSelf() ||
+                isOutOfBounds(snake1.getHead()) ||
+                snake2.hasCollidedWithSelf()
+                || isOutOfBounds(snake2.getHead()) ||
+                snake1.hasCollided(snake2.getHead())
                 || snake2.hasCollided(snake1.getHead())) {
+
             ended = true;
             return;
         }
@@ -112,17 +118,19 @@ public class Game implements JSONizable {
     /**
      * REQUIRE: pos != null
      * EFFECTS: returns whether a given position is out of bounds
+     * 
      * @param pos the position
-     * @return  whether a given position is out of bounds
+     * @return whether a given position is out of bounds
      */
     public boolean isOutOfBounds(Position pos) {
         return pos.getPosX() < 0 || pos.getPosY() < 0 || pos.getPosX() > maxX || pos.getPosY() > maxY;
     }
 
-
     /**
      * REQUIRE: pos != null
-     * EFFECTS: returns whether a given position is valid (not out of bounds, not occupied by food or snakes)
+     * EFFECTS: returns whether a given position is valid (not out of bounds, not
+     * occupied by food or snakes)
+     * 
      * @param pos the position
      * @return whether a given position is valid
      */
@@ -161,9 +169,9 @@ public class Game implements JSONizable {
         food.remove(eatenFood);
     }
 
-
     /**
      * EFFECTS: generates a random position within the bounds of the game
+     * 
      * @return a random position within the bounds of the game
      */
     private Position generateRandomPosition() {
@@ -174,7 +182,8 @@ public class Game implements JSONizable {
 
     /**
      * MODIFIES: this
-     * EFFECTS: check whether the general achievements are fulfilled and adds them to the collection if they are
+     * EFFECTS: check whether the general achievements are fulfilled and adds them
+     * to the collection if they are
      */
     public void updateAchievement() {
         if (noEatCount1 >= 1000) {
@@ -195,6 +204,7 @@ public class Game implements JSONizable {
 
     /**
      * EFFECTS: returns the first snake
+     * 
      * @return the first snake
      */
     public Snake getSnake1() {
@@ -203,6 +213,7 @@ public class Game implements JSONizable {
 
     /**
      * EFFECTS: returns the second snake
+     * 
      * @return the second snake
      */
     public Snake getSnake2() {
@@ -211,6 +222,7 @@ public class Game implements JSONizable {
 
     /**
      * EFFECTS: returns the food
+     * 
      * @return the food
      */
     public Set<Position> getFood() {
@@ -219,6 +231,7 @@ public class Game implements JSONizable {
 
     /**
      * EFFECTS: returns the score of the first snake
+     * 
      * @return the score of the first snake
      */
     public int getScore1() {
@@ -228,6 +241,7 @@ public class Game implements JSONizable {
     /**
      * MODIFIES: this
      * EFFECTS: sets the score of the first snake
+     * 
      * @param score1 the score of the first snake
      */
     public void setScore1(int score1) {
@@ -236,6 +250,7 @@ public class Game implements JSONizable {
 
     /**
      * EFFECTS: returns the achievements
+     * 
      * @return the achievements
      */
     public AchievementCollection getAchievements() {
@@ -244,6 +259,7 @@ public class Game implements JSONizable {
 
     /**
      * EFFECTS: returns the score of the second snake
+     * 
      * @return the score of the second snake
      */
     public int getScore2() {
@@ -253,6 +269,7 @@ public class Game implements JSONizable {
     /**
      * MODIFIES: this
      * EFFECTS: sets the score of the second snake
+     * 
      * @param score2 the score of the second snake
      */
     public void setScore2(int score2) {
@@ -261,14 +278,20 @@ public class Game implements JSONizable {
 
     /**
      * EFFECTS: returns whether the game has ended
+     * 
      * @return whether the game has ended
      */
     public boolean isEnded() {
         return ended;
     }
 
+    public void endGame() {
+        ended = true;
+    }
+
     /**
      * EFFECTS: returns the maximum width
+     * 
      * @return the maximum width
      */
     public int getMaxX() {
@@ -277,6 +300,7 @@ public class Game implements JSONizable {
 
     /**
      * EFFECTS: returns the maximum height
+     * 
      * @return the maximum height
      */
     public int getMaxY() {
@@ -284,8 +308,11 @@ public class Game implements JSONizable {
     }
 
     /**
-     * EFFECTS: returns the number of rounds without eating any apples or colliding for the first snake
-     * @return the number of rounds without eating any apples or colliding for the first snake
+     * EFFECTS: returns the number of rounds without eating any apples or colliding
+     * for the first snake
+     * 
+     * @return the number of rounds without eating any apples or colliding for the
+     *         first snake
      */
     public int getNoEatCount1() {
         return noEatCount1;
@@ -293,16 +320,22 @@ public class Game implements JSONizable {
 
     /**
      * MODIFIES: this
-     * EFFECTS: sets the number of rounds without eating any apples or colliding for the first snake
-     * @param noEatCount1 the number of rounds without eating any apples or colliding for the first snake
+     * EFFECTS: sets the number of rounds without eating any apples or colliding for
+     * the first snake
+     * 
+     * @param noEatCount1 the number of rounds without eating any apples or
+     *                    colliding for the first snake
      */
     public void setNoEatCount1(int noEatCount1) {
         this.noEatCount1 = noEatCount1;
     }
 
     /**
-     * EFFECTS: returns the number of rounds without eating any apples or colliding for the second snake
-     * @return the number of rounds without eating any apples or colliding for the second snake
+     * EFFECTS: returns the number of rounds without eating any apples or colliding
+     * for the second snake
+     * 
+     * @return the number of rounds without eating any apples or colliding for the
+     *         second snake
      */
     public int getNoEatCount2() {
         return noEatCount2;
@@ -310,29 +343,20 @@ public class Game implements JSONizable {
 
     /**
      * MODIFIES: this
-     * EFFECTS: sets the number of rounds without eating any apples or colliding for the second snake
-     * @param noEatCount2 the number of rounds without eating any apples or colliding for the second snake
+     * EFFECTS: sets the number of rounds without eating any apples or colliding for
+     * the second snake
+     * 
+     * @param noEatCount2 the number of rounds without eating any apples or
+     *                    colliding for the second snake
      */
     public void setNoEatCount2(int noEatCount2) {
         this.noEatCount2 = noEatCount2;
     }
 
     /**
-     * MODIFIES: this
-     * EFFECTS: toggles the game state (paused or not)
+     * EFFECTS: returns the JSON representation of the food
+     * @return the JSON representation of the food
      */
-    public void toggleState() {
-        paused = !paused;
-    }
-    
-    /**
-     * EFFECTS: returns whether the game is paused
-     * @return whether the game is paused
-     */
-    public boolean getState() {
-        return paused;
-    }
-
     public JSONObject foodToJson() {
         JSONObject json = new JSONObject();
         for (Position pos : food) {
@@ -341,20 +365,20 @@ public class Game implements JSONizable {
         return json;
     }
 
+    /**
+     * EFFECTS: returns the JSON representation of the game
+     */
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
         json.put("snake1", snake1.toJson());
         json.put("snake2", snake2.toJson());
         json.put("food", foodToJson());
-        json.put("maxX", maxX);
-        json.put("maxY", maxY);
         json.put("score1", score1);
         json.put("score2", score2);
-        json.put("ended", ended);
         json.put("noEatCount1", noEatCount1);
         json.put("noEatCount2", noEatCount2);
-        json.put("paused", paused);
         json.put("achievements", achievements.toJson());
+        json.put("TICKS_PER_SECOND", TICKS_PER_SECOND);
         return json;
     }
 
