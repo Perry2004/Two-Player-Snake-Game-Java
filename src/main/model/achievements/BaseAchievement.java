@@ -1,11 +1,14 @@
 package model.achievements;
 
+import org.json.JSONObject;
+
 import model.Snake;
+import persistence.JSONizable;
 
 /**
  * The abstract class for achievements that each achievement inherits from.
  */
-public class BaseAchievement implements Achievement {
+public class BaseAchievement implements Achievement, JSONizable {
     private final String title;
     private final String description;
     private final Snake snake;
@@ -53,5 +56,16 @@ public class BaseAchievement implements Achievement {
 
     @Override
     public void updateValue(double value) {
+    }
+
+    /**
+     * EFFECTS: returns the JSON representation of this achievement
+     */
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("title", title);
+        json.put("description", description);
+        json.put("snake", snake.toJson());
+        return json;
     }
 }

@@ -3,10 +3,15 @@ package model;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import persistence.JSONizable;
+
 /**
  * The class that represents a snake in the game
  */
-public class Snake {
+public class Snake implements JSONizable {
     private Position head;
     // first element is last part, last element is next to head
     private final List<Position> body;
@@ -75,6 +80,7 @@ public class Snake {
     /**
      * MODIFIES: this
      * EFFECTS: sets the direction of the snake
+     * 
      * @param direction the direction
      */
     public void setDirection(Direction direction) {
@@ -83,6 +89,7 @@ public class Snake {
 
     /**
      * EFFECTS: returns the head position of the snake
+     * 
      * @return the head position of the snake
      */
     public Position getHead() {
@@ -91,6 +98,7 @@ public class Snake {
 
     /**
      * EFFECTS: returns the body of the snake
+     * 
      * @return the body of the snake
      */
     public List<Position> getBody() {
@@ -99,6 +107,7 @@ public class Snake {
 
     /**
      * EFFECTS: returns the name of the snake
+     * 
      * @return the name of the snake
      */
     public String getName() {
@@ -107,6 +116,7 @@ public class Snake {
 
     /**
      * EFFECTS: returns the number of apples eaten by the snake
+     * 
      * @return the number of apples eaten by the snake
      */
     public int getNumApplesEaten() {
@@ -123,6 +133,7 @@ public class Snake {
 
     /**
      * EFFECTS: returns the direction of the snake
+     * 
      * @return the direction of the snake
      */
     public Direction getDirection() {
@@ -132,10 +143,33 @@ public class Snake {
     /**
      * MODIFIES: this
      * EFFECTS: sets the head position of the snake
+     * 
      * @param head the head position of the snake
      */
     public void setHead(Position head) {
         this.head = head;
+    }
+
+    /**
+     * EFFECTS: returns the JSON representation of the snake
+     * 
+     * @return the JSON representation of the snake
+     */
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("head", head.toJson());
+
+        JSONArray bodyJson = new JSONArray();
+        for (Position pos : body) {
+            bodyJson.put(pos.toJson());
+        }
+        json.put("body", bodyJson);
+
+        json.put("direction", direction.toJson());
+        json.put("lastRemoved", lastRemoved.toJson());
+        json.put("name", name);
+        json.put("numApplesEaten", numApplesEaten);
+        return json;
     }
 
 }

@@ -4,6 +4,7 @@ import com.googlecode.lanterna.TerminalPosition;
 import com.googlecode.lanterna.TerminalSize;
 import com.googlecode.lanterna.TextColor;
 import com.googlecode.lanterna.graphics.TextGraphics;
+import com.googlecode.lanterna.gui2.Button;
 import com.googlecode.lanterna.gui2.MultiWindowTextGUI;
 import com.googlecode.lanterna.gui2.WindowBasedTextGUI;
 import com.googlecode.lanterna.gui2.dialogs.MessageDialogBuilder;
@@ -18,9 +19,13 @@ import model.Position;
 import model.Snake;
 import model.achievements.Achievement;
 import model.achievements.GeneralAchievement;
+import persistence.JSONSaver;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Scanner;
+
+import org.json.JSONObject;
 
 /**
  * The interface for the game. Handles user input and rendering.
@@ -118,6 +123,9 @@ public class TerminalGame {
             case RIGHT:
                 game.getAchievements().getAchievement("Step Rightwards", snake).updateValue(1);
                 break;
+            case PAUSE:
+                break;
+
         }
     }
 
@@ -180,11 +188,6 @@ public class TerminalGame {
             return;
         }
 
-        if (stroke.getKeyType() == KeyType.Character && stroke.getCharacter() == 's') {
-            // TODO: save game
-            return;
-        }
-
         // handle two snakes. Arrow keys for snake 1, WASD for snake 2
         if (stroke.getKeyType() == KeyType.ArrowUp || stroke.getKeyType() == KeyType.ArrowDown
                 || stroke.getKeyType() == KeyType.ArrowRight || stroke.getKeyType() == KeyType.ArrowLeft) {
@@ -231,8 +234,6 @@ public class TerminalGame {
                     return Direction.DOWN;
                 } else if (key.getCharacter() == 'd') {
                     return Direction.RIGHT;
-                } else if (key.getCharacter() == 's') {
-                    return Direction.SAVE;
                 }
             default:
                 return null;
@@ -279,13 +280,16 @@ public class TerminalGame {
     private void drawPausedScreen() {
         pauseGui = new MultiWindowTextGUI(screen);
 
-        new MessageDialogBuilder()
+        if (new MessageDialogBuilder()
                 .setTitle("Game paused!")
-                .setText("Score 1: " + game.getScore1() + "\nScore 2: " + game.getScore2() + "\nPress s to save"
-                        + "\nPress space to continue")
+                .setText("Score 1: " + game.getScore1() + "\nScore 2: " + game.getScore2() + "\nDo you want to save?")
                 .addButton(MessageDialogButton.Continue)
+                .addButton(MessageDialogButton.Yes)
                 .build()
-                .showDialog(pauseGui);
+                .showDialog(pauseGui).equals(MessageDialogButton.Yes)) {
+            JSONSaver.saveGame("data/save1.json", game);
+        }
+
     }
 
     /**

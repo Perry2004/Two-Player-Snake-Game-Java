@@ -2,14 +2,17 @@ package model;
 
 import java.util.ArrayList;
 
+import org.json.JSONObject;
+
 import model.achievements.Achievement;
 import model.achievements.StatisticalAchievement;
+import persistence.JSONizable;
 
 /**
  * AchievementCollection is a collection of achievements that can be earned by the player.
  * It provides methods to add unique achievements and get achievements.
  */
-public class AchievementCollection {
+public class AchievementCollection implements JSONizable {
     private final ArrayList<Achievement> achievements;
 
     /**
@@ -96,5 +99,16 @@ public class AchievementCollection {
             result.append(achievement.toString()).append("\n");
         }
         return result.toString();
+    }
+
+    /**
+     * EFFECTS: returns the JSON representation of the achievement collection
+     */
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        for (Achievement achievement : this.achievements) {
+            json.append("achievements", achievement.toJson());
+        }
+        return json;
     }
 }

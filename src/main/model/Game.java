@@ -1,7 +1,7 @@
 package model;
 
 import model.achievements.GeneralAchievement;
-import persistence.Writable;
+import persistence.JSONizable;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -12,7 +12,7 @@ import org.json.JSONObject;
 /**
  * The class that contains the game state
  */
-public class Game implements Writable {
+public class Game implements JSONizable {
     private static int TICKS_PER_SECOND;
     private final Snake snake1;
     private final Snake snake2;
@@ -333,8 +333,29 @@ public class Game implements Writable {
         return paused;
     }
 
+    public JSONObject foodToJson() {
+        JSONObject json = new JSONObject();
+        for (Position pos : food) {
+            json.put("food", pos.toJson());
+        }
+        return json;
+    }
+
     public JSONObject toJson() {
-        return null;
+        JSONObject json = new JSONObject();
+        json.put("snake1", snake1.toJson());
+        json.put("snake2", snake2.toJson());
+        json.put("food", foodToJson());
+        json.put("maxX", maxX);
+        json.put("maxY", maxY);
+        json.put("score1", score1);
+        json.put("score2", score2);
+        json.put("ended", ended);
+        json.put("noEatCount1", noEatCount1);
+        json.put("noEatCount2", noEatCount2);
+        json.put("paused", paused);
+        json.put("achievements", achievements.toJson());
+        return json;
     }
 
 }

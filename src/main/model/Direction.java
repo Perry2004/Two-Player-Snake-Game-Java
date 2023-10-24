@@ -1,15 +1,18 @@
 package model;
 
+import org.json.JSONObject;
+
+import persistence.JSONizable;
+
 /**
  * The available directions in the game
  */
-public enum Direction {
+public enum Direction implements JSONizable{
     UP(0, -1),
     DOWN(0, 1),
     RIGHT(1, 0),
     LEFT(-1, 0),
     // special instructions (no movement)
-    SAVE(0, 0),
     PAUSE(0, 0);
 
     private final int directX;
@@ -36,5 +39,16 @@ public enum Direction {
         return new Position(
                 pos.getPosX() + directX,
                 pos.getPosY() + directY);
+    }
+
+    /**
+     * EFFECTS: returns the JSON representation of this direction
+     */
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("name", this.name());
+        json.put("directX", directX);
+        json.put("directY", directY);
+        return json;
     }
 }

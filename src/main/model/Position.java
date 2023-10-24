@@ -2,10 +2,14 @@ package model;
 
 import java.util.Objects;
 
+import org.json.JSONObject;
+
+import persistence.JSONizable;
+
 /**
  * The immutable class that represents a position in the game
  */
-public class Position {
+public class Position implements JSONizable{
     private final int posX;
     private final int posY;
 
@@ -51,5 +55,12 @@ public class Position {
     @Override
     public int hashCode() {
         return Objects.hash(posX, posY);
+    }
+
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("posX", posX);
+        json.put("posY", posY);
+        return json;
     }
 }
