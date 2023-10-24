@@ -22,6 +22,8 @@ the play time, and the number of achievements the player has achieved.
 - As a player, I want to be able to see the score and play time as I play the game.
 - As a player, I want my achievements and actions during the game to be recorded and displayed at the end of the game.
 - As a player, I want to play a double player game with my friend.
+- As a player, I want to be able to pause and save the game during the game play and resume it later.
+- As a player, I want to have the option to load a saved game and continue playing it.
 
 ## List of Achievements
 - Events
