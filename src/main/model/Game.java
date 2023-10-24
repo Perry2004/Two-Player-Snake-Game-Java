@@ -1,15 +1,18 @@
 package model;
 
 import model.achievements.GeneralAchievement;
+import persistence.Writable;
 
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
+import org.json.JSONObject;
+
 /**
  * The class that contains the game state
  */
-public class Game {
+public class Game implements Writable {
     private static int TICKS_PER_SECOND;
     private final Snake snake1;
     private final Snake snake2;
@@ -22,6 +25,7 @@ public class Game {
     private boolean ended = false;
     private int noEatCount1 = 0;
     private int noEatCount2 = 0;
+    private boolean paused = false;
 
     /**
      * REQUIRE: maxX and maxY are positive integers
@@ -311,6 +315,26 @@ public class Game {
      */
     public void setNoEatCount2(int noEatCount2) {
         this.noEatCount2 = noEatCount2;
+    }
+
+    /**
+     * MODIFIES: this
+     * EFFECTS: toggles the game state (paused or not)
+     */
+    public void toggleState() {
+        paused = !paused;
+    }
+    
+    /**
+     * EFFECTS: returns whether the game is paused
+     * @return whether the game is paused
+     */
+    public boolean getState() {
+        return paused;
+    }
+
+    public JSONObject toJson() {
+        return null;
     }
 
 }

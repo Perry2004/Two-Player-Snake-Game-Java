@@ -7,7 +7,10 @@ public enum Direction {
     UP(0, -1),
     DOWN(0, 1),
     RIGHT(1, 0),
-    LEFT(-1, 0);
+    LEFT(-1, 0),
+    // special instructions (no movement)
+    SAVE(0, 0),
+    PAUSE(0, 0);
 
     private final int directX;
     private final int directY;

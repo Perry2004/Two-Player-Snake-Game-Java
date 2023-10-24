@@ -29,12 +29,13 @@ public class TerminalGame {
     private Game game;
     private Screen screen;
     private WindowBasedTextGUI endGui;
+    private WindowBasedTextGUI pauseGui;
 
     /**
      * EFFECTS: Ask the user for the difficulty level and start the game
      * MODIFIES: this
      * 
-     * @throws IOException throws when the screen cannot be created
+     * @throws IOException          throws when the screen cannot be created
      * @throws InterruptedException throws when the thread is interrupted
      */
     public void start() throws IOException, InterruptedException {
@@ -73,7 +74,7 @@ public class TerminalGame {
      * game is ended, print out all achievements.
      * MODIFIES: this
      * 
-     * @throws IOException throws when the screen cannot be created
+     * @throws IOException          throws when the screen cannot be created
      * @throws InterruptedException throws when the thread is interrupted
      */
     private void beginTicks() throws IOException, InterruptedException {
@@ -173,6 +174,17 @@ public class TerminalGame {
             return;
         }
 
+        // handle pause (escape key)
+        if (stroke.getKeyType() == KeyType.Escape) {
+            drawPausedScreen();
+            return;
+        }
+
+        if (stroke.getKeyType() == KeyType.Character && stroke.getCharacter() == 's') {
+            // TODO: save game
+            return;
+        }
+
         // handle two snakes. Arrow keys for snake 1, WASD for snake 2
         if (stroke.getKeyType() == KeyType.ArrowUp || stroke.getKeyType() == KeyType.ArrowDown
                 || stroke.getKeyType() == KeyType.ArrowRight || stroke.getKeyType() == KeyType.ArrowLeft) {
@@ -208,6 +220,8 @@ public class TerminalGame {
                 return Direction.RIGHT;
             case ArrowLeft:
                 return Direction.LEFT;
+            case Escape:
+                return Direction.PAUSE;
             case Character:
                 if (key.getCharacter() == 'w') {
                     return Direction.UP;
@@ -217,6 +231,8 @@ public class TerminalGame {
                     return Direction.DOWN;
                 } else if (key.getCharacter() == 'd') {
                     return Direction.RIGHT;
+                } else if (key.getCharacter() == 's') {
+                    return Direction.SAVE;
                 }
             default:
                 return null;
@@ -254,6 +270,22 @@ public class TerminalGame {
                 .addButton(MessageDialogButton.Close)
                 .build()
                 .showDialog(endGui);
+    }
+
+    /**
+     * MODIFIES: this
+     * EFFECTS: draws the paused screen using lanterna.
+     */
+    private void drawPausedScreen() {
+        pauseGui = new MultiWindowTextGUI(screen);
+
+        new MessageDialogBuilder()
+                .setTitle("Game paused!")
+                .setText("Score 1: " + game.getScore1() + "\nScore 2: " + game.getScore2() + "\nPress s to save"
+                        + "\nPress space to continue")
+                .addButton(MessageDialogButton.Continue)
+                .build()
+                .showDialog(pauseGui);
     }
 
     /**
