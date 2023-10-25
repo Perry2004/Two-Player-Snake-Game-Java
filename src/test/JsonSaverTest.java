@@ -1,5 +1,6 @@
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.FileReader;
@@ -42,6 +43,8 @@ public class JsonSaverTest {
     public void testSaveWithException() {
         boolean res = JsonSaver.saveGame("data/illegal:\"\"\0path.json", game);
         assertFalse(res);
+        JsonSaver jsonSaver = new JsonSaver();
+        assertNotNull(jsonSaver);
     }
 
 }

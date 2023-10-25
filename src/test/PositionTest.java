@@ -31,6 +31,7 @@ public class PositionTest {
         assertEquals(position, position);
         assertNotEquals(position, differentPosition);
         assertNotEquals(null, position);
+        assertNotEquals("abc", position);
     }
 
     @Test

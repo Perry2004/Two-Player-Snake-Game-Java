@@ -1,5 +1,6 @@
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.io.File;
 import java.util.Scanner;
@@ -47,6 +48,9 @@ public class JsonLoaderTest {
         assertEquals(1, snake2.getHead().getPosX());
         assertEquals(9, snake2.getHead().getPosY());
         assertEquals(0, snake2.getBody().size());
+
+        JsonLoader jsonLoader = new JsonLoader();
+        assertNotNull(jsonLoader);
     }
 
     @Test
