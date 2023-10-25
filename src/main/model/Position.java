@@ -4,18 +4,19 @@ import java.util.Objects;
 
 import org.json.JSONObject;
 
-import persistence.JSONizable;
+import persistence.Jsonizable;
 
 /**
  * The immutable class that represents a position in the game
  */
-public class Position implements JSONizable{
+public class Position implements Jsonizable {
     private final int posX;
     private final int posY;
 
     /**
      * REQUIRE: x and y are positive integers
      * EFFECTS: constructs a new position
+     * 
      * @param x the x coordinate
      * @param y the y coordinate
      */
@@ -26,6 +27,7 @@ public class Position implements JSONizable{
 
     /**
      * EFFECTS: returns the x coordinate
+     * 
      * @return the x coordinate
      */
     public int getPosX() {
@@ -34,6 +36,7 @@ public class Position implements JSONizable{
 
     /**
      * EFFECTS: returns the y coordinate
+     * 
      * @return the y coordinate
      */
     public int getPosY() {

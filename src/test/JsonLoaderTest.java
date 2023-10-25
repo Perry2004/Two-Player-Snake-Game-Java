@@ -10,9 +10,9 @@ import org.junit.jupiter.api.Test;
 
 import model.Game;
 import model.Snake;
-import persistence.JSONLoader;
+import persistence.JsonLoader;
 
-public class JSONLoaderTest {
+public class JsonLoaderTest {
     String jsonStr;
 
     @BeforeEach
@@ -33,7 +33,7 @@ public class JSONLoaderTest {
         Game game = new Game(10, 10);
         Snake snake1 = game.getSnake1();
         Snake snake2 = game.getSnake2();
-        JSONLoader.loadGame("data/testGameSave.json", game, snake1, snake2);
+        JsonLoader.loadGame("data/testGameSave.json", game, snake1, snake2);
 
         assertEquals(0, game.getNoEatCount1());
         assertEquals(0, game.getNoEatCount2());
@@ -54,7 +54,7 @@ public class JSONLoaderTest {
         Game game = new Game(10, 10);
         Snake snake1 = game.getSnake1();
         Snake snake2 = game.getSnake2();
-        assertFalse(JSONLoader.loadGame("data/invalid::://\\GameSave.json", game, snake1, snake2));
+        assertFalse(JsonLoader.loadGame("data/invalid::://\\GameSave.json", game, snake1, snake2));
     }
 
     @Test
@@ -75,8 +75,8 @@ public class JSONLoaderTest {
         Snake snake1 = game.getSnake1();
         Snake snake2 = game.getSnake2();
 
-        assertFalse(JSONLoader.updateGame(game, snake1, snake2, json));
-        
+        assertFalse(JsonLoader.updateGame(game, snake1, snake2, json));
+
     }
 
 }

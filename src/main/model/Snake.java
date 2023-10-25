@@ -6,12 +6,12 @@ import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import persistence.JSONizable;
+import persistence.Jsonizable;
 
 /**
  * The class that represents a snake in the game
  */
-public class Snake implements JSONizable {
+public class Snake implements Jsonizable {
     private Position head;
     // first element is last part, last element is next to head
     private final List<Position> body;

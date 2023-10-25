@@ -1,7 +1,7 @@
 package model;
 
 import model.achievements.GeneralAchievement;
-import persistence.JSONizable;
+import persistence.Jsonizable;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -12,7 +12,7 @@ import org.json.JSONObject;
 /**
  * The class that contains the game state
  */
-public class Game implements JSONizable {
+public class Game implements Jsonizable {
     private static int TICKS_PER_SECOND;
     private final Snake snake1;
     private final Snake snake2;
@@ -73,11 +73,11 @@ public class Game implements JSONizable {
         snake1.move();
         snake2.move();
 
-        if (snake1.hasCollidedWithSelf() ||
-                isOutOfBounds(snake1.getHead()) ||
-                snake2.hasCollidedWithSelf()
-                || isOutOfBounds(snake2.getHead()) ||
-                snake1.hasCollided(snake2.getHead())
+        if (snake1.hasCollidedWithSelf()
+                || isOutOfBounds(snake1.getHead())
+                || snake2.hasCollidedWithSelf()
+                || isOutOfBounds(snake2.getHead())
+                || snake1.hasCollided(snake2.getHead())
                 || snake2.hasCollided(snake1.getHead())) {
 
             ended = true;
@@ -355,6 +355,7 @@ public class Game implements JSONizable {
 
     /**
      * EFFECTS: returns the JSON representation of the food
+     * 
      * @return the JSON representation of the food
      */
     public JSONObject foodToJson() {

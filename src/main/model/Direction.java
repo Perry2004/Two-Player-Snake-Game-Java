@@ -2,12 +2,12 @@ package model;
 
 import org.json.JSONObject;
 
-import persistence.JSONizable;
+import persistence.Jsonizable;
 
 /**
  * The available directions in the game
  */
-public enum Direction implements JSONizable{
+public enum Direction implements Jsonizable {
     UP(0, -1),
     DOWN(0, 1),
     RIGHT(1, 0),
@@ -21,6 +21,7 @@ public enum Direction implements JSONizable{
     /**
      * REQUIRE: directX and directY are integers
      * EFFECTS: constructs a new direction
+     * 
      * @param directX the offset in the x direction
      * @param directY the offset in the y direction
      */
@@ -31,7 +32,9 @@ public enum Direction implements JSONizable{
 
     /**
      * REQUIRE: pos != null
-     * EFFECTS: returns the position that is one step in the direction of this direction
+     * EFFECTS: returns the position that is one step in the direction of this
+     * direction
+     * 
      * @param pos the position
      * @return the position that is one step in the direction of this direction
      */

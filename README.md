@@ -38,3 +38,4 @@ the play time, and the number of achievements the player has achieved.
   4. Eaten apples: The number of apples the player has eaten.
 ## Citations 
 1. [SnakeConsole-Lanterna](https://github.students.cs.ubc.ca/CPSC210/SnakeConsole-Lanterna)
+2. [JsonSerialization](https://github.students.cs.ubc.ca/CPSC210/JsonSerializationDemo)

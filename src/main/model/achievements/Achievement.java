@@ -1,12 +1,12 @@
 package model.achievements;
 
 import model.Snake;
-import persistence.JSONizable;
+import persistence.Jsonizable;
 
 /**
  * This interface represents an achievement that can be earned by the player.
  */
-public interface Achievement extends JSONizable {
+public interface Achievement extends Jsonizable {
 
     /**
      * EFFECTS: returns true if the achievement is earned, false otherwise

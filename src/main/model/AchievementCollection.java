@@ -6,14 +6,14 @@ import org.json.JSONObject;
 
 import model.achievements.Achievement;
 import model.achievements.StatisticalAchievement;
-import persistence.JSONizable;
+import persistence.Jsonizable;
 
 /**
  * AchievementCollection is a collection of achievements that can be earned by
  * the player.
  * It provides methods to add unique achievements and get achievements.
  */
-public class AchievementCollection implements JSONizable {
+public class AchievementCollection implements Jsonizable {
     private final ArrayList<Achievement> achievements;
 
     /**

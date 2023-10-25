@@ -197,7 +197,7 @@ public class GameTest {
         snake1.setDirection(Direction.UP);
         snake2.setDirection(Direction.UP);
         game.tick();
-        
+
         assertTrue(game.isEnded());
 
         // case 2: snake2 collide with self
@@ -354,7 +354,7 @@ public class GameTest {
 
     @Test
     public void testGameToJson() {
-        game.setTicksPerSecond(5);
+        Game.setTicksPerSecond(5);
         JSONObject json = new JSONObject();
         json.put("snake1", game.getSnake1().toJson());
         json.put("snake2", game.getSnake2().toJson());
@@ -366,6 +366,22 @@ public class GameTest {
         json.put("achievements", game.getAchievements().toJson());
         json.put("TICKS_PER_SECOND", 5);
         assertEquals(json.toString(), game.toJson().toString());
+    }
+
+    @Test
+    public void testFoodAtSnake1() {
+        // spawn the food at the snake1 and check if the achievement is unlocked
+        game = new Game(10, 10);
+        Snake snake1 = game.getSnake1();
+        for (int i = 0; i < 8; i++) {
+            snake1.grow();
+            game.tick();    
+        }
+        Position foodPos = snake1.getHead();
+        game.getFood().clear();
+        game.getFood().add(foodPos);
+        game.tick();
+        assertTrue(game.getAchievements().getAchievements().size() > 10);
     }
 
 }

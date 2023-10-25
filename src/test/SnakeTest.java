@@ -112,6 +112,7 @@ public class SnakeTest {
         snake.setLastRemoved(new Position(2, 2));
         assertEquals(new Position(2, 2), snake.getLastRemoved());
     }
+
     @Test
     public void testToJson() {
         snake.grow();

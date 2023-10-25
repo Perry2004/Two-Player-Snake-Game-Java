@@ -40,10 +40,17 @@ public class StatisticalAchievement extends BaseAchievement {
         this.value += value;
     }
 
+    /**
+     * MODIFIES: this
+     * EFFECTS: sets the value of the achievement to the given value
+     * 
+     * @param value the value to set
+     */
     public void setValue(double value) {
         this.value = value;
     }
 
+    @Override
     public String toString() {
         return this.getTitle() + "\n\t" + this.getDescription() + " => " + this.getValue() + "\n\tBelongs to: "
                 + this.getSnake().getName();

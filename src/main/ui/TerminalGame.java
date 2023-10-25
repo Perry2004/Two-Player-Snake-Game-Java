@@ -18,7 +18,8 @@ import model.Position;
 import model.Snake;
 import model.achievements.Achievement;
 import model.achievements.GeneralAchievement;
-import persistence.JSONSaver;
+import persistence.JsonSaver;
+import persistence.JsonLoader;
 
 import java.io.IOException;
 import java.util.Scanner;
@@ -30,7 +31,6 @@ public class TerminalGame {
     private Game game;
     private Screen screen;
     private WindowBasedTextGUI endGui;
-    private WindowBasedTextGUI pauseGui;
     private Scanner scanner;
 
     /**
@@ -44,32 +44,10 @@ public class TerminalGame {
 
         // ask if the user wants to load a game
         scanner = new Scanner(System.in);
-        boolean load = false;
-        System.out.println("Do you want to load a game? (y/n)");
-        while (true) {
-            String input = scanner.nextLine();
-            if (input.equals("y")) {
-                load = true;
-                break;
-            } else if (input.equals("n")) {
-                break;
-            }
-        }
+        boolean load = isLoad();
 
         if (!load) {
-            int difficulty = 0;
-            System.out.println("Please enter the difficulty level (1-3): ");
-            while (difficulty < 1 || difficulty > 3) {
-                difficulty = scanner.nextInt();
-            }
-
-            if (difficulty == 1) {
-                Game.setTicksPerSecond(5);
-            } else if (difficulty == 2) {
-                Game.setTicksPerSecond(10);
-            } else {
-                Game.setTicksPerSecond(15);
-            }
+            chooseDifficulty();
         }
 
         screen = new DefaultTerminalFactory().createScreen();
@@ -84,10 +62,41 @@ public class TerminalGame {
                 terminalSize.getRows() - 2);
 
         if (load) {
-            persistence.JSONLoader.loadGame("data/save1.json", game, game.getSnake1(), game.getSnake2());
+            JsonLoader.loadGame("data/save1.json", game, game.getSnake1(), game.getSnake2());
         }
 
         beginTicks();
+    }
+
+    private void chooseDifficulty() {
+        int difficulty = 0;
+        System.out.println("Please enter the difficulty level (1-3): ");
+        while (difficulty < 1 || difficulty > 3) {
+            difficulty = scanner.nextInt();
+        }
+
+        if (difficulty == 1) {
+            Game.setTicksPerSecond(5);
+        } else if (difficulty == 2) {
+            Game.setTicksPerSecond(10);
+        } else {
+            Game.setTicksPerSecond(15);
+        }
+    }
+
+    private boolean isLoad() {
+        boolean load = false;
+        System.out.println("Do you want to load a game? (y/n)");
+        while (true) {
+            String input = scanner.nextLine();
+            if (input.equals("y")) {
+                load = true;
+                break;
+            } else if (input.equals("n")) {
+                break;
+            }
+        }
+        return load;
     }
 
     /**
@@ -228,9 +237,7 @@ public class TerminalGame {
      * @return the direction corresponding to the given key
      */
     private Direction directionFrom(KeyStroke key) {
-        KeyType type = key.getKeyType();
-
-        switch (type) {
+        switch (key.getKeyType()) {
             case ArrowUp:
                 return Direction.UP;
             case ArrowDown:
@@ -242,18 +249,26 @@ public class TerminalGame {
             case Escape:
                 return Direction.PAUSE;
             case Character:
-                if (key.getCharacter() == 'w') {
-                    return Direction.UP;
-                } else if (key.getCharacter() == 'a') {
-                    return Direction.LEFT;
-                } else if (key.getCharacter() == 's') {
-                    return Direction.DOWN;
-                } else if (key.getCharacter() == 'd') {
-                    return Direction.RIGHT;
+                Direction up = getCharKey(key);
+                if (up != null) {
+                    return up;
                 }
             default:
                 return null;
         }
+    }
+
+    private static Direction getCharKey(KeyStroke key) {
+        if (key.getCharacter() == 'w') {
+            return Direction.UP;
+        } else if (key.getCharacter() == 'a') {
+            return Direction.LEFT;
+        } else if (key.getCharacter() == 's') {
+            return Direction.DOWN;
+        } else if (key.getCharacter() == 'd') {
+            return Direction.RIGHT;
+        }
+        return null;
     }
 
     /**
@@ -294,7 +309,7 @@ public class TerminalGame {
      * EFFECTS: draws the paused screen using lanterna.
      */
     private void drawPausedScreen() {
-        pauseGui = new MultiWindowTextGUI(screen);
+        WindowBasedTextGUI pauseGui = new MultiWindowTextGUI(screen);
 
         if (new MessageDialogBuilder()
                 .setTitle("Game paused!")
@@ -303,7 +318,7 @@ public class TerminalGame {
                 .addButton(MessageDialogButton.Yes)
                 .build()
                 .showDialog(pauseGui).equals(MessageDialogButton.Yes)) {
-            JSONSaver.saveGame("data/save1.json", game);
+            JsonSaver.saveGame("data/save1.json", game);
             game.endGame();
         }
 

@@ -1,15 +1,12 @@
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
 import model.AchievementCollection;
 import model.Snake;
 import model.achievements.Achievement;
 import model.achievements.GeneralAchievement;
 import model.achievements.StatisticalAchievement;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
-
-import org.json.JSONObject;
 
 public class AchievementTest {
     private AchievementCollection ac;

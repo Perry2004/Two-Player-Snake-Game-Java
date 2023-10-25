@@ -10,11 +10,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import model.Game;
-import model.Snake;
-import model.achievements.GeneralAchievement;
-import persistence.JSONSaver;
+import persistence.JsonSaver;
 
-public class JSONSaverTest {
+public class JsonSaverTest {
     Game game;
 
     @BeforeEach
@@ -24,7 +22,7 @@ public class JSONSaverTest {
 
     @Test
     public void testSave() {
-        JSONSaver.saveGame("data/testSnakeSave.json", game.getSnake1());
+        JsonSaver.saveGame("data/testSnakeSave.json", game.getSnake1());
 
         // read in the file
         try (Reader reader = new FileReader("data/testSnakeSave.json")) {
@@ -42,7 +40,7 @@ public class JSONSaverTest {
 
     @Test
     public void testSaveWithException() {
-        boolean res = JSONSaver.saveGame("data/illegal:\"\"\0path.json", game);
+        boolean res = JsonSaver.saveGame("data/illegal:\"\"\0path.json", game);
         assertFalse(res);
     }
 

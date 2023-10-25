@@ -30,8 +30,7 @@ public class PositionTest {
         assertEquals(position, samePosition);
         assertEquals(position, position);
         assertNotEquals(position, differentPosition);
-        assertFalse(position.equals(null));
-        assertFalse(position.equals("not a position"));
+        assertNotEquals(null, position);
     }
 
     @Test
