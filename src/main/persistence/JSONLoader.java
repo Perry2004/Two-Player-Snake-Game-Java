@@ -29,7 +29,7 @@ public class JSONLoader {
      * @param snake1 the first snake to update
      * @param snake2 the second snake to update
      */
-    public static void loadGame(String path, Game game, Snake snake1, Snake snake2) {
+    public static boolean loadGame(String path, Game game, Snake snake1, Snake snake2) {
         StringBuilder jsonString = new StringBuilder();
         try (Scanner scanner = new Scanner(new File(path))) {
             while (scanner.hasNextLine()) {
@@ -37,8 +37,10 @@ public class JSONLoader {
             }
         } catch (Exception e) {
             System.out.println("Error loading file: " + e.getMessage());
+            return false;
         }
         updateGame(game, snake1, snake2, new JSONObject(jsonString.toString()));
+        return true;
     }
 
     /**
@@ -50,7 +52,7 @@ public class JSONLoader {
      * @param snake2
      * @param json
      */
-    public static void updateGame(Game game, Snake snake1, Snake snake2, JSONObject json) {
+    public static boolean updateGame(Game game, Snake snake1, Snake snake2, JSONObject json) {
         // update game board
         int noEatCount1 = json.getInt("noEatCount1");
         int noEatCount2 = json.getInt("noEatCount2");
@@ -85,9 +87,11 @@ public class JSONLoader {
                 gameAchievement.setValue(savedAchievement.getDouble("value"));
             } catch (Exception e) {
                 game.getAchievements().addAchievement(new GeneralAchievement(title, description, snake));
+                return false;
             }
 
         }
+        return true;
     }
 
     /**

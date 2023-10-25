@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Set;
 
+import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import model.Direction;
@@ -57,6 +58,8 @@ public class GameTest {
         assertEquals(expectSnake1Pos, game.getSnake1().getHead());
         // assert that the food set is not empty
         assertFalse(food.isEmpty());
+        game.endGame();
+        assertTrue(game.isEnded());
     }
 
     @Test
@@ -340,6 +343,29 @@ public class GameTest {
             game.tick();
         }
         assertTrue(game.isEnded());
+    }
+
+    @Test
+    public void testFoodToJson() {
+        Position foodPos = game.getFood().iterator().next();
+        String expected = "{\"food\":" + foodPos.toJson().toString() + "}";
+        assertEquals(expected, game.foodToJson().toString());
+    }
+
+    @Test
+    public void testGameToJson() {
+        game.setTicksPerSecond(5);
+        JSONObject json = new JSONObject();
+        json.put("snake1", game.getSnake1().toJson());
+        json.put("snake2", game.getSnake2().toJson());
+        json.put("food", game.foodToJson());
+        json.put("score1", 0);
+        json.put("score2", 0);
+        json.put("noEatCount1", 0);
+        json.put("noEatCount2", 0);
+        json.put("achievements", game.getAchievements().toJson());
+        json.put("TICKS_PER_SECOND", 5);
+        assertEquals(json.toString(), game.toJson().toString());
     }
 
 }

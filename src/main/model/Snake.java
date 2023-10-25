@@ -181,4 +181,11 @@ public class Snake implements JSONizable {
         this.lastRemoved = position;
     }
 
+    /**
+     * EFFECTS: returns the last removed position
+     * @return the last removed position
+     */
+    public Position getLastRemoved() {
+        return lastRemoved;
+    }
 }

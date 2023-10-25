@@ -1,130 +1,126 @@
 {
-    "noEatCount2": 61,
-    "noEatCount1": 7,
+    "noEatCount2": 0,
+    "noEatCount1": 0,
     "achievements": {"achievements": [
         {
             "snake": "one",
             "description": "Number of keys pressed",
             "title": "Key Stroke",
-            "value": 14
+            "value": 0
         },
         {
             "snake": "one",
             "description": "Number of steps going upwards",
             "title": "Step Upwards",
-            "value": 7
+            "value": 0
         },
         {
             "snake": "one",
             "description": "Number of steps going downwards",
             "title": "Step Downwards",
-            "value": 14
+            "value": 0
         },
         {
             "snake": "one",
             "description": "Number of steps going leftwards",
             "title": "Step Leftwards",
-            "value": 15
+            "value": 0
         },
         {
             "snake": "one",
             "description": "Number of steps going rightwards",
             "title": "Step Rightwards",
-            "value": 27
+            "value": 0
         },
         {
             "snake": "one",
             "description": "Number of rounds played",
             "title": "Total Rounds",
-            "value": 63
+            "value": 0
         },
         {
             "snake": "one",
             "description": "Number of apples eaten",
             "title": "Apples Eaten",
-            "value": 3
+            "value": 0
         },
         {
             "snake": "two",
             "description": "Number of keys pressed",
             "title": "Key Stroke",
-            "value": 13
+            "value": 0
         },
         {
             "snake": "two",
             "description": "Number of steps going upwards",
             "title": "Step Upwards",
-            "value": 14
+            "value": 0
         },
         {
             "snake": "two",
             "description": "Number of steps going downwards",
             "title": "Step Downwards",
-            "value": 9
+            "value": 0
         },
         {
             "snake": "two",
             "description": "Number of steps going leftwards",
             "title": "Step Leftwards",
-            "value": 9
+            "value": 0
         },
         {
             "snake": "two",
             "description": "Number of steps going rightwards",
             "title": "Step Rightwards",
-            "value": 31
+            "value": 0
         },
         {
             "snake": "two",
             "description": "Number of rounds played",
             "title": "Total Rounds",
-            "value": 63
+            "value": 0
         },
         {
             "snake": "two",
             "description": "Number of apples eaten",
             "title": "Apples Eaten",
             "value": 0
+        },
+        {
+            "snake": "abc",
+            "description": "abc",
+            "title": "abc"
         }
     ]},
     "score2": 0,
     "snake1": {
         "head": {
-            "posX": 13,
-            "posY": 8
+            "posX": 1,
+            "posY": 1
         },
         "numApplesEaten": 0,
         "lastRemoved": {
-            "posX": 10,
-            "posY": 8
+            "posX": 0,
+            "posY": 0
         },
         "name": "one",
-        "body": [
-            {
-                "posX": 11,
-                "posY": 8
-            },
-            {
-                "posX": 12,
-                "posY": 8
-            }
-        ],
+        "body": [],
         "direction": {
             "directY": 0,
             "name": "RIGHT",
             "directX": 1
         }
     },
-    "TICKS_PER_SECOND": 5,
+    "TICKS_PER_SECOND": 0,
     "snake2": {
         "head": {
-            "posX": 23,
-            "posY": 16
+            "posX": 1,
+            "posY": 9
         },
         "numApplesEaten": 0,
         "lastRemoved": {
-            "posX": 22,
-            "posY": 16
+            "posX": 0,
+            "posY": 0
         },
         "name": "two",
         "body": [],
@@ -134,9 +130,9 @@
             "directX": 1
         }
     },
-    "score1": 2,
+    "score1": 0,
     "food": {"food": {
         "posX": 2,
-        "posY": 2
+        "posY": 0
     }}
 }

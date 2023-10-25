@@ -9,6 +9,8 @@ import model.achievements.StatisticalAchievement;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.json.JSONObject;
+
 public class AchievementTest {
     private AchievementCollection ac;
     private Snake snake1;
@@ -80,4 +82,25 @@ public class AchievementTest {
         assertEquals(0, a1.getValue());
         assertEquals(2, a2.getValue());
     }
+
+    @Test
+    public void testToJson() {
+        String expected = "{\"achievements\":[{\"snake\":\"one\",\"description\":\"Number of keys pressed\",\"title\":\"Key Stroke\",\"value\":0},{\"snake\":\"one\",\"description\":\"Number of steps going upwards\",\"title\":\"Step Upwards\",\"value\":0},{\"snake\":\"one\",\"description\":\"Number of steps going downwards\",\"title\":\"Step Downwards\",\"value\":0},{\"snake\":\"one\",\"description\":\"Number of steps going leftwards\",\"title\":\"Step Leftwards\",\"value\":0},{\"snake\":\"one\",\"description\":\"Number of steps going rightwards\",\"title\":\"Step Rightwards\",\"value\":0},{\"snake\":\"one\",\"description\":\"Number of rounds played\",\"title\":\"Total Rounds\",\"value\":0},{\"snake\":\"one\",\"description\":\"Number of apples eaten\",\"title\":\"Apples Eaten\",\"value\":0},{\"snake\":\"two\",\"description\":\"Number of keys pressed\",\"title\":\"Key Stroke\",\"value\":0},{\"snake\":\"two\",\"description\":\"Number of steps going upwards\",\"title\":\"Step Upwards\",\"value\":0},{\"snake\":\"two\",\"description\":\"Number of steps going downwards\",\"title\":\"Step Downwards\",\"value\":0},{\"snake\":\"two\",\"description\":\"Number of steps going leftwards\",\"title\":\"Step Leftwards\",\"value\":0},{\"snake\":\"two\",\"description\":\"Number of steps going rightwards\",\"title\":\"Step Rightwards\",\"value\":0},{\"snake\":\"two\",\"description\":\"Number of rounds played\",\"title\":\"Total Rounds\",\"value\":0},{\"snake\":\"two\",\"description\":\"Number of apples eaten\",\"title\":\"Apples Eaten\",\"value\":0}]}";
+        assertEquals(expected, ac.toJson().toString());
+    }
+
+    @Test
+    public void testGeneralToJson() {
+        a1 = new GeneralAchievement("a1", "a1", snake1);
+        String expected = "{\"snake\":\"one\",\"description\":\"a1\",\"title\":\"a1\"}";
+        assertEquals(expected, a1.toJson().toString());
+    }
+
+    @Test
+    public void testStatSetValue() {
+        StatisticalAchievement a = new StatisticalAchievement("a", "a", snake1, 1);
+        a.setValue(2);
+        assertEquals(2, a.getValue());
+    }
+
 }

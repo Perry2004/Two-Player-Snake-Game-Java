@@ -106,4 +106,17 @@ public class SnakeTest {
         snake.setHead(new Position(2, 2));
         assertEquals(new Position(2, 2), snake.getHead());
     }
+
+    @Test
+    public void testSetLastRemoved() {
+        snake.setLastRemoved(new Position(2, 2));
+        assertEquals(new Position(2, 2), snake.getLastRemoved());
+    }
+    @Test
+    public void testToJson() {
+        snake.grow();
+        snake.move();
+        String expected = "{\"head\":{\"posX\":2,\"posY\":1},\"numApplesEaten\":0,\"lastRemoved\":{\"posX\":0,\"posY\":0},\"name\":\"a\",\"body\":[{\"posX\":1,\"posY\":1}],\"direction\":{\"directY\":0,\"name\":\"RIGHT\",\"directX\":1}}";
+        assertEquals(expected, snake.toJson().toString());
+    }
 }

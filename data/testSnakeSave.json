@@ -1,0 +1,18 @@
+{
+    "head": {
+        "posX": 1,
+        "posY": 1
+    },
+    "numApplesEaten": 0,
+    "lastRemoved": {
+        "posX": 0,
+        "posY": 0
+    },
+    "name": "one",
+    "body": [],
+    "direction": {
+        "directY": 0,
+        "name": "RIGHT",
+        "directX": 1
+    }
+}

@@ -14,12 +14,14 @@ public class JSONSaver {
      * @param path the path to save the object to
      * @param toSave the object to save
      */
-    public static void saveGame(String path, JSONizable toSave) {
+    public static boolean saveGame (String path, JSONizable toSave) {
         try (PrintWriter writer = new PrintWriter(new File(path))) {
             writer.print(toSave.toJson().toString(TAB));
             System.out.println("Game successfully saved to " + path);
+            return true;
         } catch (Exception e) {
             System.out.println("Error saving file: " + e.getMessage());
+            return false;
         }
     }
 }
