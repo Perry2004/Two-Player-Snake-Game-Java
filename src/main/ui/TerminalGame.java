@@ -201,7 +201,7 @@ public class TerminalGame {
             return;
         }
 
-        Direction dir = directionFrom(stroke);
+        Direction dir = directionFromKey(stroke);
 
         if (dir == null) {
             return;
@@ -236,7 +236,7 @@ public class TerminalGame {
      * @param key the key pressed by the user
      * @return the direction corresponding to the given key
      */
-    private Direction directionFrom(KeyStroke key) {
+    private Direction directionFromKey(KeyStroke key) {
         switch (key.getKeyType()) {
             case ArrowUp:
                 return Direction.UP;
