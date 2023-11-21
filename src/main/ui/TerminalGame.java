@@ -68,6 +68,10 @@ public class TerminalGame {
         beginTicks();
     }
 
+    /**
+     * MODIFIES: this
+     * EFFECTS: ask the user for the difficulty level and set the ticks per second (faster speed for higher difficulty)
+     */
     private void chooseDifficulty() {
         int difficulty = 0;
         System.out.println("Please enter the difficulty level (1-3): ");
@@ -84,6 +88,10 @@ public class TerminalGame {
         }
     }
 
+    /**
+     * EFFECTS: returns if the user wants to load a game
+     * @return true if the user wants to load a game, false otherwise
+     */
     private boolean isLoad() {
         boolean load = false;
         System.out.println("Do you want to load a game? (y/n)");
@@ -242,6 +250,11 @@ public class TerminalGame {
         }
     }
 
+    /**
+     * EFFECTS: returns the direction corresponding to the given key. 
+     * @param key the key pressed by the user
+     * @return the direction corresponding to the given key
+     */
     private static Direction getCharKey(KeyStroke key) {
         if (key.getCharacter() == 'w') {
             return Direction.UP;

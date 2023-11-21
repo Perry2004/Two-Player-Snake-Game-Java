@@ -38,8 +38,15 @@ public class GameView implements ActionListener, KeyListener {
     JPanel difficultyPanel;
     JComboBox<String> difficultyComboBox;
     Timer gameTimer;
+
+    /**
+     * The main game loop invoked by the timer
+     */
     ActionListener gameLoop = new ActionListener() {
         @Override
+        /*
+          EFFECTS: tick the game and update the game view
+         */
         public void actionPerformed(ActionEvent e) {
             tick();
             // update round achievements
@@ -48,16 +55,26 @@ public class GameView implements ActionListener, KeyListener {
             // update step for different directions
             updateStepAchievement(game.getSnake1());
             updateStepAchievement(game.getSnake2());
-            checkSpeedyAchievement();
+
         }
     };
     private boolean isPaused = false;
 
+    /**
+     * Constructs a new GameView
+     */
     public GameView() {
         game = new Game(COLUMNS, ROWS);
     }
 
-    static void updateStep(Snake snake, Game game) {
+    /**
+     * MODIFIES: this
+     * EFFECTS: updates the step achievement for the snake
+     *
+     * @param snake the snake to update the step achievement for
+     * @param game  the game to update the step achievement for
+     */
+    public static void updateStep(Snake snake, Game game) {
         switch (snake.getDirection()) {
             case UP:
                 game.getAchievements().getAchievement("Step Upwards", snake).updateValue(1);
@@ -77,8 +94,15 @@ public class GameView implements ActionListener, KeyListener {
         }
     }
 
+    /**
+     * MODIFIES: this
+     * EFFECTS: adds the statistical achievements to the selected achievements list
+     *
+     * @param allAchievements      the list of all achievements
+     * @param selectedAchievements the list of selected achievements
+     */
     private static void getStatisticalAchievements(ArrayList<Achievement> allAchievements,
-            ArrayList<Achievement> selectedAchievements) {
+                                                   ArrayList<Achievement> selectedAchievements) {
         for (Achievement achievement : allAchievements) {
             if (achievement.getClass().getSimpleName().equals("StatisticalAchievement")) {
                 selectedAchievements.add(achievement);
@@ -86,8 +110,15 @@ public class GameView implements ActionListener, KeyListener {
         }
     }
 
+    /**
+     * MODIFIES: this
+     * EFFECTS: adds the general achievements to the selected achievements list
+     *
+     * @param allAchievements      the list of all achievements
+     * @param selectedAchievements the list of selected achievements
+     */
     private static void getGeneralAchievements(ArrayList<Achievement> allAchievements,
-            ArrayList<Achievement> selectedAchievements) {
+                                               ArrayList<Achievement> selectedAchievements) {
         for (Achievement achievement : allAchievements) {
             if (achievement.getClass().getSimpleName().equals("GeneralAchievement")) {
                 selectedAchievements.add(achievement);
@@ -95,14 +126,22 @@ public class GameView implements ActionListener, KeyListener {
         }
     }
 
+    /**
+     * EFFECTS: starts the game loop with a timer set to the ticks per second
+     */
     public void beginTicks() {
         gameTimer = new Timer(1000 / Game.getTicksPerSecond(), gameLoop);
         gameTimer.start();
     }
 
+    /**
+     * MODIFIES: this, game
+     * EFFECTS: runs one tick of the game and updates the game view
+     */
     public void tick() {
         game.tick();
         if (game.isEnded()) {
+            checkSpeedyAchievement();
             setUpEndWindow();
         }
         render();
@@ -110,6 +149,10 @@ public class GameView implements ActionListener, KeyListener {
         gameWindow.repaint();
     }
 
+    /**
+     * MODIFIES: this
+     * EFFECTS: renders the game view for the current game state
+     */
     public void render() {
         // clear the board
         for (int i = 0; i < ROWS * COLUMNS; i++) {
@@ -121,6 +164,10 @@ public class GameView implements ActionListener, KeyListener {
         drawFood();
     }
 
+    /**
+     * MODIFIES: this
+     * EFFECTS: draws the score panel on the game window
+     */
     public void drawScore() {
         scorePanel.removeAll();
         scorePanel.add(new JLabel("Score 1: \t" + game.getScore1()));
@@ -129,6 +176,11 @@ public class GameView implements ActionListener, KeyListener {
         scorePanel.repaint();
     }
 
+    /**
+     * MODIFIES: this
+     * EFFECTS: draws the snake to the game window with the position specified in
+     * the game model
+     */
     public void drawSnake() {
         Snake snake1 = game.getSnake1();
         setColorByPosition(snake1.getHead(), Color.BLUE);
@@ -143,6 +195,11 @@ public class GameView implements ActionListener, KeyListener {
         }
     }
 
+    /**
+     * MODIFIES: this
+     * EFFECTS: draws only one food to the game window with the position specified
+     * in the game model
+     */
     public void drawFood() {
         for (Position pos : game.getFood()) {
             setColorByPosition(pos, Color.RED);
@@ -150,6 +207,11 @@ public class GameView implements ActionListener, KeyListener {
         }
     }
 
+    /**
+     * MODIFIES: this, game
+     * EFFECTS: adds the speedy achievement to the game if the snake has finished
+     * the game in less than 20 rounds
+     */
     private void checkSpeedyAchievement() {
         // if the snake has already gotten the achievement, don't add it again
         if (game.getAchievements().getAchievement("The Speedy", game.getSnake1()) != null || game.getAchievements()
@@ -165,6 +227,14 @@ public class GameView implements ActionListener, KeyListener {
         }
     }
 
+    /**
+     * MODIFIES: this
+     * EFFECTS: sets the color of the grid at the position specified with the color
+     * specified
+     *
+     * @param p     the position of the grid
+     * @param color the color to set the grid to
+     */
     public void setColorByPosition(Position p, Color color) {
         int index = (p.getPosY() * COLUMNS) - 1 + p.getPosX() - 1;
         if (index < 0 || index >= ROWS * COLUMNS) {
@@ -174,12 +244,16 @@ public class GameView implements ActionListener, KeyListener {
         grid.setBackground(color);
     }
 
+    /**
+     * MODIFIES: this
+     * EFFECTS: displays the select difficulty window
+     */
     public void displaySelectDifficultyWindow() {
         selectDifficultyWindow = new JDialog(gameWindow, "Snake Game");
         difficultyPanel = new JPanel();
         selectDifficultyWindow.add(difficultyPanel);
         difficultyPanel.add(new JLabel("Please select difficulty"));
-        difficultyComboBox = new JComboBox<>(new String[] { "Easy", "Medium", "Hard" });
+        difficultyComboBox = new JComboBox<>(new String[]{"Easy", "Medium", "Hard"});
         difficultyComboBox.setSelectedItem(null);
         difficultyComboBox.addActionListener(this);
         difficultyPanel.add(difficultyComboBox);
@@ -187,6 +261,11 @@ public class GameView implements ActionListener, KeyListener {
         selectDifficultyWindow.setVisible(true);
     }
 
+    /**
+     * MODIFIES: this
+     * EFFECTS: displays a window to ask the user if they want to load the previous
+     * game
+     */
     public void displayLoadWindow() {
         loadWindow = new JDialog(gameWindow, "Snake Game");
         JPanel loadPanel = new JPanel();
@@ -202,6 +281,13 @@ public class GameView implements ActionListener, KeyListener {
         loadWindow.setVisible(true);
     }
 
+    /**
+     * MODIFIES: this
+     * EFFECTS: sets up the menu bar for the game window that contains the save game
+     * option
+     *
+     * @return the menu bar for the game window
+     */
     public JMenuBar setUpMenuBar() {
         menuBar = new JMenuBar();
         fileMenu = new JMenu("File");
@@ -213,6 +299,13 @@ public class GameView implements ActionListener, KeyListener {
         return menuBar;
     }
 
+    /**
+     * MODIFIES: this
+     * EFFECTS: creates the grids for the game window and returns the panel
+     * containing the grids
+     *
+     * @return the panel containing the grids
+     */
     public JPanel createGrids() {
         this.gamePanel = new JPanel();
         this.gamePanel.setLayout(new GridLayout(ROWS, COLUMNS));
@@ -225,6 +318,12 @@ public class GameView implements ActionListener, KeyListener {
         return this.gamePanel;
     }
 
+    /**
+     * MODIFIES: this
+     * EFFECTS: sets the difficulty of the game based on the selected difficulty
+     *
+     * @param selectedDifficulty the selected difficulty
+     */
     public void setDifficulty(String selectedDifficulty) {
         switch (selectedDifficulty) {
             case "Easy":
@@ -239,6 +338,10 @@ public class GameView implements ActionListener, KeyListener {
         }
     }
 
+    /**
+     * MODIFIES: this
+     * EFFECTS: sets up the main game window
+     */
     public void setUpGameWindow() {
         gameWindow = new JFrame("Snake Game");
         gameWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -264,6 +367,10 @@ public class GameView implements ActionListener, KeyListener {
 
     }
 
+    /**
+     * MODIFIES: this
+     * EFFECTS: sets up the windows that shows when the game ends
+     */
     public void setUpEndWindow() {
         gameWindow.setVisible(false);
         gameWindow.getContentPane().removeAll();
@@ -282,12 +389,17 @@ public class GameView implements ActionListener, KeyListener {
         game.endGame();
     }
 
+    /**
+     * MODIFIES: this
+     * EFFECTS: sets up the achievement panel that shows the achievements when the
+     * game ends
+     */
     private void setUpAchievementPanel() {
         JPanel achievementPanel = new JPanel();
         achievementPanel.setLayout(new BoxLayout(achievementPanel, BoxLayout.Y_AXIS));
         achievementPanel.add(new JLabel("Achievements"));
         achievementFilterComboBox = new JComboBox<>(
-                new String[] { "All", "Snake 1", "Snake 2", "Special", "Statistical" });
+                new String[]{"All", "Snake 1", "Snake 2", "Special", "Statistical"});
         achievementFilterComboBox.setSelectedItem(null);
         achievementPanel.add(achievementFilterComboBox);
         achievementFilterComboBox.addActionListener(this);
@@ -302,10 +414,22 @@ public class GameView implements ActionListener, KeyListener {
         achievementPanel.add(achievementScrollPane, BorderLayout.AFTER_LINE_ENDS);
     }
 
+    /**
+     * MODIFIES: this
+     * EFFECTS: updates the step achievement for the snake
+     *
+     * @param snake the snake to update the step achievement for
+     */
     private void updateStepAchievement(Snake snake) {
         updateStep(snake, game);
     }
 
+    /**
+     * MODIFIES: this
+     * EFFECTS: updates the achievements panel based on the filter
+     *
+     * @param filter the filter to update the achievements panel with
+     */
     private void updateAchievementsPanel(String filter) {
         ArrayList<Achievement> allAchievements = game.getAchievements().getAchievements();
         ArrayList<Achievement> selectedAchievements = new ArrayList<>();
@@ -332,8 +456,17 @@ public class GameView implements ActionListener, KeyListener {
         extractAchievementsString(selectedAchievements);
     }
 
+    /**
+     * MODIFIES: this
+     * EFFECTS: adds the achievements for the snake to the selected achievements
+     * list for further display
+     *
+     * @param s                    the snake to add the achievements for
+     * @param allAchievements      the list of all achievements
+     * @param selectedAchievements the list of selected achievements
+     */
     private void addAchievementsForSnake(Snake s, ArrayList<Achievement> allAchievements,
-            ArrayList<Achievement> selectedAchievements) {
+                                         ArrayList<Achievement> selectedAchievements) {
         for (Achievement achievement : allAchievements) {
             if (achievement.getSnake() == s) {
                 selectedAchievements.add(achievement);
@@ -341,6 +474,12 @@ public class GameView implements ActionListener, KeyListener {
         }
     }
 
+    /**
+     * MODIFIES: this
+     * EFFECTS: extracts the achievements string from the selected achievements list
+     *
+     * @param selectedAchievements a list of selected achievements
+     */
     private void extractAchievementsString(ArrayList<Achievement> selectedAchievements) {
         StringBuilder text = new StringBuilder();
         for (Achievement a : selectedAchievements) {
@@ -356,8 +495,14 @@ public class GameView implements ActionListener, KeyListener {
     }
 
     @Override
+    /*
+      MODIFIES: this
+      EFFECTS: handles the action events
+     */
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
+
+        // load the game if the user clicks yes button
         if (source == this.yesLoadButton) {
             loadOrNot(true);
         } else if (source == this.noLoadButton) {
@@ -382,6 +527,12 @@ public class GameView implements ActionListener, KeyListener {
         }
     }
 
+    /**
+     * MODIFIES: this
+     * EFFECTS: displays the achievements matching the selected filter
+     *
+     * @param source the source of the action event
+     */
     private void handleAchievementFilter(JComboBox<?> source) {
         if (source.getSelectedItem() == null) {
             return;
@@ -390,6 +541,12 @@ public class GameView implements ActionListener, KeyListener {
         this.updateAchievementsPanel(selectedFilter);
     }
 
+    /**
+     * MODIFIES: this
+     * EFFECTS: loads the game if the user clicks yes, otherwise starts a new game
+     *
+     * @param load whether the user wants to load the game
+     */
     private void loadOrNot(boolean load) {
         loadWindow.setVisible(load);
         loadWindow.dispose();
@@ -402,20 +559,35 @@ public class GameView implements ActionListener, KeyListener {
     }
 
     @Override
+    /*
+      Required by KeyListener interface
+     */
     public void keyTyped(KeyEvent e) {
 
     }
 
     @Override
+    /*
+      EFFECTS: handles the user input when the user presses a key
+     */
     public void keyPressed(KeyEvent e) {
         handleUserInput(e);
     }
 
     @Override
+    /*
+      Required by KeyListener interface
+     */
     public void keyReleased(KeyEvent e) {
 
     }
 
+    /**
+     * MODIFIES: this
+     * EFFECTS: sets the direction of the snake based on the user input
+     *
+     * @param e the key event
+     */
     public void handleUserInput(KeyEvent e) {
         int key = e.getKeyCode();
 
@@ -436,6 +608,12 @@ public class GameView implements ActionListener, KeyListener {
         }
     }
 
+    /**
+     * EFFECTS: extracts the direction from the key pressed
+     *
+     * @param key the key pressed
+     * @return the direction extracted from the key pressed
+     */
     private Direction directionFromKey(KeyEvent key) {
         switch (key.getKeyCode()) {
             case KeyEvent.VK_UP:

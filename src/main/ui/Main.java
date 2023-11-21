@@ -6,6 +6,12 @@ import java.util.Scanner;
  * Driver class for the game
  */
 public class Main {
+    /**
+     * Main method for the game
+     * EFFECTS: starts the game
+     * @param args command line arguments (unused)
+     * @throws Exception if there is an error in the game
+     */
     public static void main(String[] args) throws Exception {
 //        ask the user which version of the game they want to play
         try (Scanner scanner = new Scanner(System.in)) {
