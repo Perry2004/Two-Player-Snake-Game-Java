@@ -1,10 +1,6 @@
 package ui;
 
-import model.AchievementCollection;
-import model.Direction;
-import model.Game;
-import model.Position;
-import model.Snake;
+import model.*;
 import model.achievements.Achievement;
 import model.achievements.GeneralAchievement;
 import persistence.JsonLoader;
@@ -409,13 +405,13 @@ public class GameView implements ActionListener, KeyListener {
         aboutPanel.add(new JLabel("This is a double player snake game proudly made by"));
         aboutPanel.add(new JLabel("Perry Zhu"));
         gameWindow.add(aboutPanel, BorderLayout.AFTER_LAST_LINE);
-        // add a image of me
+        // add an image of me
         ImageIcon imageIcon = new ImageIcon("data/Image.png");
         JLabel imageLabel = new JLabel(imageIcon);
         aboutPanel.add(imageLabel);
 
         gameWindow.pack();
-        
+
     }
 
     /**
@@ -541,16 +537,7 @@ public class GameView implements ActionListener, KeyListener {
             game.endGame();
             setUpEndWindow();
         } else if (source == this.difficultyComboBox) {
-            if (((JComboBox<?>) source).getSelectedItem() == null) {
-                return;
-            }
-            String selectedDifficulty = ((JComboBox<?>) source).getSelectedItem().toString();
-            this.setDifficulty(selectedDifficulty);
-
-            // start the game after the user selects the difficulty
-            selectDifficultyWindow.setVisible(false);
-            selectDifficultyWindow.dispose();
-            this.setUpGameWindow();
+            handleDifficulty((JComboBox<?>) source);
         } else if (source == this.achievementFilterComboBox) {
             handleAchievementFilter((JComboBox<?>) source);
         } else if (source == this.exportAchievementsButton) {
@@ -558,6 +545,19 @@ public class GameView implements ActionListener, KeyListener {
         } else if (source == this.nextButton) {
             setUpAboutPanel();
         }
+    }
+
+    private void handleDifficulty(JComboBox<?> source) {
+        if (source.getSelectedItem() == null) {
+            return;
+        }
+        String selectedDifficulty = source.getSelectedItem().toString();
+        this.setDifficulty(selectedDifficulty);
+
+        // start the game after the user selects the difficulty
+        selectDifficultyWindow.setVisible(false);
+        selectDifficultyWindow.dispose();
+        this.setUpGameWindow();
     }
 
     private void exportAchievements() {
