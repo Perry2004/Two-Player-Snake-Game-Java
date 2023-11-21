@@ -135,23 +135,7 @@ public class TerminalGame {
      * @param snake the snake to check
      */
     private void updateStepAchievement(Snake snake) {
-        switch (snake.getDirection()) {
-            case UP:
-                game.getAchievements().getAchievement("Step Upwards", snake).updateValue(1);
-                break;
-            case DOWN:
-                game.getAchievements().getAchievement("Step Downwards", snake).updateValue(1);
-                break;
-            case LEFT:
-                game.getAchievements().getAchievement("Step Leftwards", snake).updateValue(1);
-                break;
-            case RIGHT:
-                game.getAchievements().getAchievement("Step Rightwards", snake).updateValue(1);
-                break;
-            case PAUSE:
-                break;
-
-        }
+        GameView.updateStep(snake, game);
     }
 
     /**

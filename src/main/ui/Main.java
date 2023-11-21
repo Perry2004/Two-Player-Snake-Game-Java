@@ -9,7 +9,8 @@ public class Main {
     public static void main(String[] args) throws Exception {
 //        ask the user which version of the game they want to play
         try (Scanner scanner = new Scanner(System.in)) {
-            System.out.println("Select which version of the game you want to play: (1) Swing GUI, (2) Lanterna Terminal");
+            System.out.println("Select which version of the game you want to play: "
+                    + "(1) Swing GUI, (2) Lanterna Terminal");
             while (true) {
                 int choice = scanner.nextInt();
                 if (choice == 1) {

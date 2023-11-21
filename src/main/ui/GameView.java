@@ -1,7 +1,5 @@
 package ui;
 
-import javax.swing.*;
-
 import model.Direction;
 import model.Game;
 import model.Position;
@@ -11,6 +9,7 @@ import model.achievements.GeneralAchievement;
 import persistence.JsonLoader;
 import persistence.JsonSaver;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -22,11 +21,11 @@ public class GameView implements ActionListener, KeyListener {
     public static final int ROWS = 30;
     public static final int COLUMNS = 50;
     public static final int GRID_SIZE = 10;
-
+    private final Game game;
     JDialog selectDifficultyWindow;
     JDialog loadWindow;
-    JButton yLoadBtn;
-    JButton nLoadBtn;
+    JButton yesLoadButton;
+    JButton noLoadButton;
     JFrame gameWindow;
     JPanel gamePanel;
     JMenuBar menuBar;
@@ -36,20 +35,67 @@ public class GameView implements ActionListener, KeyListener {
     JTextPane achievementsPanel;
     JScrollPane achievementScrollPane;
     JComboBox<String> achievementFilterComboBox;
-
     JPanel difficultyPanel;
     JComboBox<String> difficultyComboBox;
-
     Timer gameTimer;
+    ActionListener gameLoop = new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            tick();
+            // update round achievements
+            game.getAchievements().getAchievement("Total Rounds", game.getSnake1()).updateValue(1);
+            game.getAchievements().getAchievement("Total Rounds", game.getSnake2()).updateValue(1);
+            // update step for different directions
+            updateStepAchievement(game.getSnake1());
+            updateStepAchievement(game.getSnake2());
+            checkSpeedyAchievement();
+        }
+    };
     private boolean isPaused = false;
-
-    private Game game;
 
     public GameView() {
         game = new Game(COLUMNS, ROWS);
     }
 
-    public void beginTicks() throws InterruptedException {
+    static void updateStep(Snake snake, Game game) {
+        switch (snake.getDirection()) {
+            case UP:
+                game.getAchievements().getAchievement("Step Upwards", snake).updateValue(1);
+                break;
+            case DOWN:
+                game.getAchievements().getAchievement("Step Downwards", snake).updateValue(1);
+                break;
+            case LEFT:
+                game.getAchievements().getAchievement("Step Leftwards", snake).updateValue(1);
+                break;
+            case RIGHT:
+                game.getAchievements().getAchievement("Step Rightwards", snake).updateValue(1);
+                break;
+            case PAUSE:
+                break;
+
+        }
+    }
+
+    private static void getStatisticalAchievements(ArrayList<Achievement> allAchievements,
+            ArrayList<Achievement> selectedAchievements) {
+        for (Achievement achievement : allAchievements) {
+            if (achievement.getClass().getSimpleName().equals("StatisticalAchievement")) {
+                selectedAchievements.add(achievement);
+            }
+        }
+    }
+
+    private static void getGeneralAchievements(ArrayList<Achievement> allAchievements,
+            ArrayList<Achievement> selectedAchievements) {
+        for (Achievement achievement : allAchievements) {
+            if (achievement.getClass().getSimpleName().equals("GeneralAchievement")) {
+                selectedAchievements.add(achievement);
+            }
+        }
+    }
+
+    public void beginTicks() {
         gameTimer = new Timer(1000 / Game.getTicksPerSecond(), gameLoop);
         gameTimer.start();
     }
@@ -100,6 +146,7 @@ public class GameView implements ActionListener, KeyListener {
     public void drawFood() {
         for (Position pos : game.getFood()) {
             setColorByPosition(pos, Color.RED);
+            break;
         }
     }
 
@@ -144,12 +191,12 @@ public class GameView implements ActionListener, KeyListener {
         loadWindow = new JDialog(gameWindow, "Snake Game");
         JPanel loadPanel = new JPanel();
         loadPanel.add(new JLabel("Do you want to load the previous game?"));
-        yLoadBtn = new JButton("Yes");
-        yLoadBtn.addActionListener(this);
-        loadPanel.add(yLoadBtn);
-        nLoadBtn = new JButton("No");
-        nLoadBtn.addActionListener(this);
-        loadPanel.add(nLoadBtn);
+        yesLoadButton = new JButton("Yes");
+        yesLoadButton.addActionListener(this);
+        loadPanel.add(yesLoadButton);
+        noLoadButton = new JButton("No");
+        noLoadButton.addActionListener(this);
+        loadPanel.add(noLoadButton);
         loadWindow.add(loadPanel);
         loadWindow.pack();
         loadWindow.setVisible(true);
@@ -179,12 +226,16 @@ public class GameView implements ActionListener, KeyListener {
     }
 
     public void setDifficulty(String selectedDifficulty) {
-        if (selectedDifficulty.equals("Easy")) {
-            Game.setTicksPerSecond(5);
-        } else if (selectedDifficulty.equals("Medium")) {
-            Game.setTicksPerSecond(10);
-        } else if (selectedDifficulty.equals("Hard")) {
-            Game.setTicksPerSecond(15);
+        switch (selectedDifficulty) {
+            case "Easy":
+                Game.setTicksPerSecond(5);
+                break;
+            case "Medium":
+                Game.setTicksPerSecond(10);
+                break;
+            case "Hard":
+                Game.setTicksPerSecond(15);
+                break;
         }
     }
 
@@ -208,6 +259,7 @@ public class GameView implements ActionListener, KeyListener {
         try {
             beginTicks();
         } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
         }
 
     }
@@ -221,6 +273,16 @@ public class GameView implements ActionListener, KeyListener {
         endPanel.add(gameOverLabel);
         gameWindow.add(endPanel, BorderLayout.CENTER);
 
+        setUpAchievementPanel();
+
+        gameWindow.pack();
+        gameWindow.setVisible(true);
+
+        gameTimer.stop();
+        game.endGame();
+    }
+
+    private void setUpAchievementPanel() {
         JPanel achievementPanel = new JPanel();
         achievementPanel.setLayout(new BoxLayout(achievementPanel, BoxLayout.Y_AXIS));
         achievementPanel.add(new JLabel("Achievements"));
@@ -236,34 +298,12 @@ public class GameView implements ActionListener, KeyListener {
         achievementScrollPane = new JScrollPane(achievementsPanel);
         achievementScrollPane.setPreferredSize(new Dimension(300, 300));
         achievementScrollPane.setVerticalScrollBar(new JScrollBar());
-        
+
         achievementPanel.add(achievementScrollPane, BorderLayout.AFTER_LINE_ENDS);
-
-        gameWindow.pack();
-        gameWindow.setVisible(true);
-
-        gameTimer.stop();
-        game.endGame();
     }
 
     private void updateStepAchievement(Snake snake) {
-        switch (snake.getDirection()) {
-            case UP:
-                game.getAchievements().getAchievement("Step Upwards", snake).updateValue(1);
-                break;
-            case DOWN:
-                game.getAchievements().getAchievement("Step Downwards", snake).updateValue(1);
-                break;
-            case LEFT:
-                game.getAchievements().getAchievement("Step Leftwards", snake).updateValue(1);
-                break;
-            case RIGHT:
-                game.getAchievements().getAchievement("Step Rightwards", snake).updateValue(1);
-                break;
-            case PAUSE:
-                break;
-
-        }
+        updateStep(snake, game);
     }
 
     private void updateAchievementsPanel(String filter) {
@@ -272,39 +312,42 @@ public class GameView implements ActionListener, KeyListener {
         if (filter == null) {
             return;
         }
-        if (filter.equals("All")) {
-            selectedAchievements = allAchievements;
-        } else if (filter.equals("Snake 1")) {
-            for (Achievement achievement : allAchievements) {
-                if (achievement.getSnake() == game.getSnake1()) {
-                    selectedAchievements.add(achievement);
-                }
-            }
-        } else if (filter.equals("Snake 2")) {
-            for (Achievement achievement : allAchievements) {
-                if (achievement.getSnake() == game.getSnake2()) {
-                    selectedAchievements.add(achievement);
-                }
-            }
-        } else if (filter.equals("Special")) {
-            for (Achievement achievement : allAchievements) {
-                if (achievement.getClass().getSimpleName().equals("GeneralAchievement")) {
-                    selectedAchievements.add(achievement);
-                }
-            }
-        } else if (filter.equals("Statistical")) {
-            for (Achievement achievement : allAchievements) {
-                if (achievement.getClass().getSimpleName().equals("StatisticalAchievement")) {
-                    selectedAchievements.add(achievement);
-                }
+        switch (filter) {
+            case "All":
+                selectedAchievements = allAchievements;
+                break;
+            case "Snake 1":
+                addAchievementsForSnake(game.getSnake1(), allAchievements, selectedAchievements);
+                break;
+            case "Snake 2":
+                addAchievementsForSnake(game.getSnake2(), allAchievements, selectedAchievements);
+                break;
+            case "Special":
+                getGeneralAchievements(allAchievements, selectedAchievements);
+                break;
+            case "Statistical":
+                getStatisticalAchievements(allAchievements, selectedAchievements);
+                break;
+        }
+        extractAchievementsString(selectedAchievements);
+    }
+
+    private void addAchievementsForSnake(Snake s, ArrayList<Achievement> allAchievements,
+            ArrayList<Achievement> selectedAchievements) {
+        for (Achievement achievement : allAchievements) {
+            if (achievement.getSnake() == s) {
+                selectedAchievements.add(achievement);
             }
         }
-        String text = "";
+    }
+
+    private void extractAchievementsString(ArrayList<Achievement> selectedAchievements) {
+        StringBuilder text = new StringBuilder();
         for (Achievement a : selectedAchievements) {
-            text += a.toString();
-            text += "\n";
+            text.append(a.toString());
+            text.append("\n");
         }
-        achievementsPanel.setText(text);
+        achievementsPanel.setText(text.toString());
         achievementsPanel.revalidate();
         achievementsPanel.repaint();
         achievementScrollPane.revalidate();
@@ -315,15 +358,10 @@ public class GameView implements ActionListener, KeyListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
-        if (source == this.yLoadBtn) {
-            loadWindow.setVisible(false);
-            loadWindow.dispose();
-            JsonLoader.loadGame("data/save1.json", game, game.getSnake1(), game.getSnake2());
-            setUpGameWindow();
-        } else if (source == this.nLoadBtn) {
-            loadWindow.setVisible(false);
-            loadWindow.dispose();
-            displaySelectDifficultyWindow();
+        if (source == this.yesLoadButton) {
+            loadOrNot(true);
+        } else if (source == this.noLoadButton) {
+            loadOrNot(false);
         } else if (source == this.saveMenuItem) {
             JsonSaver.saveGame("data/save1.json", game);
             game.endGame();
@@ -332,28 +370,35 @@ public class GameView implements ActionListener, KeyListener {
             if (((JComboBox<?>) source).getSelectedItem() == null) {
                 return;
             }
-            String selectedDifficluty = ((JComboBox<?>) source).getSelectedItem().toString();
-            this.setDifficulty(selectedDifficluty);
+            String selectedDifficulty = ((JComboBox<?>) source).getSelectedItem().toString();
+            this.setDifficulty(selectedDifficulty);
 
             // start the game after the user selects the difficulty
             selectDifficultyWindow.setVisible(false);
             selectDifficultyWindow.dispose();
-
             this.setUpGameWindow();
-        } else if (source == this.saveMenuItem) {
-            setUpEndWindow();
         } else if (source == this.achievementFilterComboBox) {
-            if (((JComboBox<?>) source).getSelectedItem() == null) {
-                return;
-            }
-            String selectedFilter = ((JComboBox<?>) source).getSelectedItem().toString();
-            this.updateAchievementsPanel(selectedFilter);
+            handleAchievementFilter((JComboBox<?>) source);
         }
     }
 
-    public static void main(String[] args) {
-        GameView gameView = new GameView();
-        gameView.displayLoadWindow();
+    private void handleAchievementFilter(JComboBox<?> source) {
+        if (source.getSelectedItem() == null) {
+            return;
+        }
+        String selectedFilter = source.getSelectedItem().toString();
+        this.updateAchievementsPanel(selectedFilter);
+    }
+
+    private void loadOrNot(boolean load) {
+        loadWindow.setVisible(load);
+        loadWindow.dispose();
+        if (load) {
+            JsonLoader.loadGame("data/save1.json", game, game.getSnake1(), game.getSnake2());
+            setUpGameWindow();
+        } else {
+            displaySelectDifficultyWindow();
+        }
     }
 
     @Override
@@ -394,39 +439,21 @@ public class GameView implements ActionListener, KeyListener {
     private Direction directionFromKey(KeyEvent key) {
         switch (key.getKeyCode()) {
             case KeyEvent.VK_UP:
+            case KeyEvent.VK_W:
                 return Direction.UP;
             case KeyEvent.VK_DOWN:
+            case KeyEvent.VK_S:
                 return Direction.DOWN;
             case KeyEvent.VK_RIGHT:
+            case KeyEvent.VK_D:
                 return Direction.RIGHT;
             case KeyEvent.VK_LEFT:
+            case KeyEvent.VK_A:
                 return Direction.LEFT;
             case KeyEvent.VK_ESCAPE:
                 return Direction.PAUSE;
-            case KeyEvent.VK_W:
-                return Direction.UP;
-            case KeyEvent.VK_S:
-                return Direction.DOWN;
-            case KeyEvent.VK_D:
-                return Direction.RIGHT;
-            case KeyEvent.VK_A:
-                return Direction.LEFT;
             default:
                 return null;
         }
     }
-
-    ActionListener gameLoop = new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            tick();
-            // update round achievements
-            game.getAchievements().getAchievement("Total Rounds", game.getSnake1()).updateValue(1);
-            game.getAchievements().getAchievement("Total Rounds", game.getSnake2()).updateValue(1);
-            // update step for different directions
-            updateStepAchievement(game.getSnake1());
-            updateStepAchievement(game.getSnake2());
-            checkSpeedyAchievement();
-        }
-    };
 }
