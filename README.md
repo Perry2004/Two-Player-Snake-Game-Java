@@ -41,7 +41,7 @@ the play time, and the number of achievements the player has achieved.
 - You can filter the achievements by clicking the "Filter" button and selecting the type of achievements you want to see.
 - You can export the achievements to a file by clicking the "Export Achievements" button at the end of the game to share
   with your friends.
-- You can locate my visual component by looking at the grid game board and the achievements table.
+- You can locate my visual component at the last about page of the game.
 - You can save the game by clicking the "File" -> "Save" menu item.
 - You will be prompted to load a saved game when you start the game. 
 ## Citations 

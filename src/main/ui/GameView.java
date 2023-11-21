@@ -29,6 +29,7 @@ public class GameView implements ActionListener, KeyListener {
     JButton yesLoadButton;
     JButton noLoadButton;
     JButton exportAchievementsButton;
+    JButton nextButton;
     JFrame gameWindow;
     JPanel gamePanel;
     JMenuBar menuBar;
@@ -389,11 +390,32 @@ public class GameView implements ActionListener, KeyListener {
 
         setUpAchievementPanel();
 
+        nextButton = new JButton("Next");
+        nextButton.addActionListener(this);
+        gameWindow.add(nextButton, BorderLayout.WEST);
+
         gameWindow.pack();
         gameWindow.setVisible(true);
 
         gameTimer.stop();
         game.endGame();
+    }
+
+    private void setUpAboutPanel() {
+        gameWindow.getContentPane().removeAll();
+        JPanel aboutPanel = new JPanel();
+        aboutPanel.setLayout(new BoxLayout(aboutPanel, BoxLayout.Y_AXIS));
+        aboutPanel.add(new JLabel("About"));
+        aboutPanel.add(new JLabel("This is a double player snake game proudly made by"));
+        aboutPanel.add(new JLabel("Perry Zhu"));
+        gameWindow.add(aboutPanel, BorderLayout.AFTER_LAST_LINE);
+        // add a image of me
+        ImageIcon imageIcon = new ImageIcon("data/Image.png");
+        JLabel imageLabel = new JLabel(imageIcon);
+        aboutPanel.add(imageLabel);
+
+        gameWindow.pack();
+        
     }
 
     /**
@@ -533,6 +555,8 @@ public class GameView implements ActionListener, KeyListener {
             handleAchievementFilter((JComboBox<?>) source);
         } else if (source == this.exportAchievementsButton) {
             exportAchievements();
+        } else if (source == this.nextButton) {
+            setUpAboutPanel();
         }
     }
 
