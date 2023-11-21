@@ -1,5 +1,6 @@
 package ui;
 
+import model.AchievementCollection;
 import model.Direction;
 import model.Game;
 import model.Position;
@@ -15,6 +16,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.FileWriter;
 import java.util.ArrayList;
 
 public class GameView implements ActionListener, KeyListener {
@@ -26,6 +28,7 @@ public class GameView implements ActionListener, KeyListener {
     JDialog loadWindow;
     JButton yesLoadButton;
     JButton noLoadButton;
+    JButton exportAchievementsButton;
     JFrame gameWindow;
     JPanel gamePanel;
     JMenuBar menuBar;
@@ -380,6 +383,10 @@ public class GameView implements ActionListener, KeyListener {
         endPanel.add(gameOverLabel);
         gameWindow.add(endPanel, BorderLayout.CENTER);
 
+        exportAchievementsButton = new JButton("Export Achievements");
+        exportAchievementsButton.addActionListener(this);
+        gameWindow.add(exportAchievementsButton, BorderLayout.NORTH);
+
         setUpAchievementPanel();
 
         gameWindow.pack();
@@ -524,6 +531,19 @@ public class GameView implements ActionListener, KeyListener {
             this.setUpGameWindow();
         } else if (source == this.achievementFilterComboBox) {
             handleAchievementFilter((JComboBox<?>) source);
+        } else if (source == this.exportAchievementsButton) {
+            exportAchievements();
+        }
+    }
+
+    private void exportAchievements() {
+        AchievementCollection achievements = game.getAchievements();
+        try (FileWriter file = new FileWriter("data/achievements.txt")) {
+            file.write(achievements.toString());
+            file.flush();
+            System.out.println("Successfully exported achievements to data/achievements.txt");
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
         }
     }
 

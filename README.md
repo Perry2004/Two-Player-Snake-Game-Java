@@ -36,6 +36,14 @@ the play time, and the number of achievements the player has achieved.
   2. Steps in each direction: The number of steps the player has made in each direction.
   3. Total rounds: The total number of rounds the player has played.
   4. Eaten apples: The number of apples the player has eaten.
+## Instructions for Grader 
+- You can add get an achievement added to the game by finishing the game in less than 20 rounds.
+- You can filter the achievements by clicking the "Filter" button and selecting the type of achievements you want to see.
+- You can export the achievements to a file by clicking the "Export Achievements" button at the end of the game to share
+  with your friends.
+- You can locate my visual component by looking at the grid game board and the achievements table.
+- You can save the game by clicking the "File" -> "Save" menu item.
+- You will be prompted to load a saved game when you start the game. 
 ## Citations 
 1. [SnakeConsole-Lanterna](https://github.students.cs.ubc.ca/CPSC210/SnakeConsole-Lanterna)
 2. [JsonSerialization](https://github.students.cs.ubc.ca/CPSC210/JsonSerializationDemo)
