@@ -39,7 +39,9 @@ public class AchievementCollection implements Jsonizable {
      */
     public void setUpStats(Snake snake1, Snake snake2) {
         setUpStats(snake1);
+        EventLog.getInstance().logEvent(new Event("Initialized statistical achievements for " + snake1.getName()));
         setUpStats(snake2);
+        EventLog.getInstance().logEvent(new Event("Initialized statistical achievements for " + snake2.getName()));
     }
 
     /**
@@ -70,8 +72,10 @@ public class AchievementCollection implements Jsonizable {
     public boolean addAchievement(Achievement achievement) {
         if (!this.achievements.contains(achievement)) {
             this.achievements.add(achievement);
+            EventLog.getInstance().logEvent(new Event("Added achievement " + achievement.getTitle()));
             return true;
         }
+        EventLog.getInstance().logEvent(new Event("Failed to add achievement " + achievement.getTitle()));
         return false;
     }
 

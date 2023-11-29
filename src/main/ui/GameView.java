@@ -1,5 +1,6 @@
 package ui;
 
+import model.Event;
 import model.*;
 import model.achievements.Achievement;
 import model.achievements.GeneralAchievement;
@@ -8,14 +9,11 @@ import persistence.JsonSaver;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.awt.event.*;
 import java.io.FileWriter;
 import java.util.ArrayList;
 
-public class GameView implements ActionListener, KeyListener {
+public class GameView implements ActionListener, KeyListener, WindowListener {
     public static final int ROWS = 30;
     public static final int COLUMNS = 50;
     public static final int GRID_SIZE = 10;
@@ -38,14 +36,13 @@ public class GameView implements ActionListener, KeyListener {
     JPanel difficultyPanel;
     JComboBox<String> difficultyComboBox;
     Timer gameTimer;
-
     /**
      * The main game loop invoked by the timer
      */
     ActionListener gameLoop = new ActionListener() {
         @Override
         /*
-          EFFECTS: tick the game and update the game view
+         * EFFECTS: tick the game and update the game view
          */
         public void actionPerformed(ActionEvent e) {
             tick();
@@ -102,7 +99,7 @@ public class GameView implements ActionListener, KeyListener {
      * @param selectedAchievements the list of selected achievements
      */
     private static void getStatisticalAchievements(ArrayList<Achievement> allAchievements,
-                                                   ArrayList<Achievement> selectedAchievements) {
+            ArrayList<Achievement> selectedAchievements) {
         for (Achievement achievement : allAchievements) {
             if (achievement.getClass().getSimpleName().equals("StatisticalAchievement")) {
                 selectedAchievements.add(achievement);
@@ -118,12 +115,45 @@ public class GameView implements ActionListener, KeyListener {
      * @param selectedAchievements the list of selected achievements
      */
     private static void getGeneralAchievements(ArrayList<Achievement> allAchievements,
-                                               ArrayList<Achievement> selectedAchievements) {
+            ArrayList<Achievement> selectedAchievements) {
         for (Achievement achievement : allAchievements) {
             if (achievement.getClass().getSimpleName().equals("GeneralAchievement")) {
                 selectedAchievements.add(achievement);
             }
         }
+    }
+
+    @Override
+    public void windowOpened(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowClosing(WindowEvent e) {
+        System.out.println("Game ended. Logging events...");
+        for (Event event : EventLog.getInstance()) {
+            System.out.println(event.toString());
+        }
+    }
+
+    @Override
+    public void windowIconified(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowDeiconified(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowActivated(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowDeactivated(WindowEvent e) {
+
     }
 
     /**
@@ -253,7 +283,7 @@ public class GameView implements ActionListener, KeyListener {
         difficultyPanel = new JPanel();
         selectDifficultyWindow.add(difficultyPanel);
         difficultyPanel.add(new JLabel("Please select difficulty"));
-        difficultyComboBox = new JComboBox<>(new String[]{"Easy", "Medium", "Hard"});
+        difficultyComboBox = new JComboBox<>(new String[] { "Easy", "Medium", "Hard" });
         difficultyComboBox.setSelectedItem(null);
         difficultyComboBox.addActionListener(this);
         difficultyPanel.add(difficultyComboBox);
@@ -399,6 +429,9 @@ public class GameView implements ActionListener, KeyListener {
 
     private void setUpAboutPanel() {
         gameWindow.getContentPane().removeAll();
+
+        gameWindow.addWindowListener(this);
+
         JPanel aboutPanel = new JPanel();
         aboutPanel.setLayout(new BoxLayout(aboutPanel, BoxLayout.Y_AXIS));
         aboutPanel.add(new JLabel("About"));
@@ -424,7 +457,7 @@ public class GameView implements ActionListener, KeyListener {
         achievementPanel.setLayout(new BoxLayout(achievementPanel, BoxLayout.Y_AXIS));
         achievementPanel.add(new JLabel("Achievements"));
         achievementFilterComboBox = new JComboBox<>(
-                new String[]{"All", "Snake 1", "Snake 2", "Special", "Statistical"});
+                new String[] { "All", "Snake 1", "Snake 2", "Special", "Statistical" });
         achievementFilterComboBox.setSelectedItem(null);
         achievementPanel.add(achievementFilterComboBox);
         achievementFilterComboBox.addActionListener(this);
@@ -447,6 +480,13 @@ public class GameView implements ActionListener, KeyListener {
      */
     private void updateStepAchievement(Snake snake) {
         updateStep(snake, game);
+    }
+
+    @Override
+    public void windowClosed(WindowEvent e) {
+        for (Event event : EventLog.getInstance()) {
+            System.out.println(event.toString());
+        }
     }
 
     /**
@@ -491,7 +531,7 @@ public class GameView implements ActionListener, KeyListener {
      * @param selectedAchievements the list of selected achievements
      */
     private void addAchievementsForSnake(Snake s, ArrayList<Achievement> allAchievements,
-                                         ArrayList<Achievement> selectedAchievements) {
+            ArrayList<Achievement> selectedAchievements) {
         for (Achievement achievement : allAchievements) {
             if (achievement.getSnake() == s) {
                 selectedAchievements.add(achievement);
@@ -521,8 +561,8 @@ public class GameView implements ActionListener, KeyListener {
 
     @Override
     /*
-      MODIFIES: this
-      EFFECTS: handles the action events
+     * MODIFIES: this
+     * EFFECTS: handles the action events
      */
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
@@ -604,7 +644,7 @@ public class GameView implements ActionListener, KeyListener {
 
     @Override
     /*
-      Required by KeyListener interface
+     * Required by KeyListener interface
      */
     public void keyTyped(KeyEvent e) {
 
@@ -612,7 +652,7 @@ public class GameView implements ActionListener, KeyListener {
 
     @Override
     /*
-      EFFECTS: handles the user input when the user presses a key
+     * EFFECTS: handles the user input when the user presses a key
      */
     public void keyPressed(KeyEvent e) {
         handleUserInput(e);
@@ -620,7 +660,7 @@ public class GameView implements ActionListener, KeyListener {
 
     @Override
     /*
-      Required by KeyListener interface
+     * Required by KeyListener interface
      */
     public void keyReleased(KeyEvent e) {
 

@@ -12,10 +12,7 @@ import com.googlecode.lanterna.input.KeyStroke;
 import com.googlecode.lanterna.input.KeyType;
 import com.googlecode.lanterna.screen.Screen;
 import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
-import model.Direction;
-import model.Game;
-import model.Position;
-import model.Snake;
+import model.*;
 import model.achievements.Achievement;
 import model.achievements.GeneralAchievement;
 import persistence.JsonSaver;
@@ -131,6 +128,11 @@ public class TerminalGame {
         // print out all achievements
         for (Achievement a : game.getAchievements().getAchievements()) {
             System.out.println(a);
+        }
+
+        System.out.println("Game End. Start logging...");
+        for (Event event : EventLog.getInstance()) {
+            System.out.println(event);
         }
         System.exit(0);
     }

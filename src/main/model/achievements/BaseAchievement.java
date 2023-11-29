@@ -1,7 +1,11 @@
 package model.achievements;
 
+import java.util.EventListener;
+
 import org.json.JSONObject;
 
+import model.Event;
+import model.EventLog;
 import model.Snake;
 
 /**
@@ -55,6 +59,7 @@ public class BaseAchievement implements Achievement {
 
     @Override
     public void updateValue(double value) {
+        EventLog.getInstance().logEvent(new Event("Updated achievement " + this.title + " by " + value));
     }
 
     /**
