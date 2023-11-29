@@ -44,6 +44,23 @@ the play time, and the number of achievements the player has achieved.
 - You can locate my visual component at the last about page of the game.
 - You can save the game by clicking the "File" -> "Save" menu item.
 - You will be prompted to load a saved game when you start the game. 
+
+## Phase 4: Task 2
+```text
+Game ended. Logging events...
+Tue Nov 28 18:13:25 PST 2023
+Initialized statistical achievements for one
+Tue Nov 28 18:13:25 PST 2023
+Initialized statistical achievements for two
+Tue Nov 28 18:13:27 PST 2023
+...
+Tue Nov 28 18:13:32 PST 2023
+Updated achievement Step Leftwards from one by 1.0
+Tue Nov 28 18:13:32 PST 2023
+Updated achievement Step Leftwards from two by 1.0
+Tue Nov 28 18:13:32 PST 2023
+Game ended
+```
 ## Citations 
 1. [SnakeConsole-Lanterna](https://github.students.cs.ubc.ca/CPSC210/SnakeConsole-Lanterna)
 2. [JsonSerialization](https://github.students.cs.ubc.ca/CPSC210/JsonSerializationDemo)

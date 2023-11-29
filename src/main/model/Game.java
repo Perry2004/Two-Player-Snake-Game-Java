@@ -286,6 +286,7 @@ public class Game implements Jsonizable {
     }
 
     public void endGame() {
+        EventLog.getInstance().logEvent(new Event("Game ended"));
         ended = true;
     }
 

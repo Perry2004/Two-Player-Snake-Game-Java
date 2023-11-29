@@ -37,6 +37,7 @@ public class StatisticalAchievement extends BaseAchievement {
      * EFFECTS: updates the value by adding the given value to the current value
      */
     public void updateValue(double value) {
+        super.updateValue(value);
         this.value += value;
     }
 

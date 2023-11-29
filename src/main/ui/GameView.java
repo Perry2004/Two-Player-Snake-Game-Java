@@ -129,6 +129,9 @@ public class GameView implements ActionListener, KeyListener, WindowListener {
     }
 
     @Override
+    /**
+     * EFFECTS: logs the events when the window is closed
+     */
     public void windowClosing(WindowEvent e) {
         System.out.println("Game ended. Logging events...");
         for (Event event : EventLog.getInstance()) {
@@ -427,6 +430,10 @@ public class GameView implements ActionListener, KeyListener, WindowListener {
         game.endGame();
     }
 
+    /**
+     * MODIFIES: this
+     * EFFECTS: sets up the "about" panel that shows the information about the game
+     */
     private void setUpAboutPanel() {
         gameWindow.getContentPane().removeAll();
 
@@ -587,6 +594,11 @@ public class GameView implements ActionListener, KeyListener, WindowListener {
         }
     }
 
+    /**
+     * MODIFIES: this
+     * EFFECTS: handles the difficulty selected by the user
+     * @param source the source of the action event
+     */
     private void handleDifficulty(JComboBox<?> source) {
         if (source.getSelectedItem() == null) {
             return;
@@ -600,6 +612,10 @@ public class GameView implements ActionListener, KeyListener, WindowListener {
         this.setUpGameWindow();
     }
 
+    /**
+     * MODIFIES: this
+     * EFFECTS: exports the achievements to a text file
+     */
     private void exportAchievements() {
         AchievementCollection achievements = game.getAchievements();
         try (FileWriter file = new FileWriter("data/achievements.txt")) {

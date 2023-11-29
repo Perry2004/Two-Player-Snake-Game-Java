@@ -107,6 +107,7 @@ public class TerminalGame {
     /**
      * EFFECTS: start the game rounds. Moves the snakes and update stats. If the
      * game is ended, print out all achievements.
+     * Log all events at the end of the game
      * MODIFIES: this
      * 
      * @throws IOException          throws when the screen cannot be created

@@ -31,8 +31,10 @@ public class AchievementCollection implements Jsonizable {
 
     /**
      * REQUIRE: snake1 != null && snake2 != null
+     * MODIFIES: this, EventLog
      * EFFECTS: sets up the statistical achievements for the given snakes.
      * Initializes the values to 0.
+     * Logs the event.
      * 
      * @param snake1 the first snake
      * @param snake2 the second snake

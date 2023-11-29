@@ -1,12 +1,9 @@
 package model.achievements;
 
-import java.util.EventListener;
-
-import org.json.JSONObject;
-
 import model.Event;
 import model.EventLog;
 import model.Snake;
+import org.json.JSONObject;
 
 /**
  * The abstract class for achievements that each achievement inherits from.
@@ -20,7 +17,7 @@ public class BaseAchievement implements Achievement {
      * REQUIRES: title and description are non-empty strings, snake is a valid snake
      * EFFECTS: constructs a new achievement with the given title, description, and
      * snake
-     * 
+     *
      * @param title       the title of the achievement
      * @param description the description of the achievement
      * @param snake       the snake that the achievement is associated with
@@ -58,8 +55,14 @@ public class BaseAchievement implements Achievement {
     }
 
     @Override
+    /**
+     * EFFECTS: logs an event that the achievement has been updated by the given
+     * value
+     * MODIFIES: EventLog
+     */
     public void updateValue(double value) {
-        EventLog.getInstance().logEvent(new Event("Updated achievement " + this.title + " by " + value));
+        EventLog.getInstance().logEvent(new Event("Updated achievement " + this.title + " from " + snake.getName()
+                + " by " + value));
     }
 
     /**
