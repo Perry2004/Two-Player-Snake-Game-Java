@@ -32,7 +32,7 @@ the play time, and the number of achievements the player has achieved.
   3. The Eater: Eat 100 apples in total.
   4. The Speedy: Finish the game in less than 20 rounds.
 - Statistical
-  1. The key strokes: The number of keystrokes the player has made.
+  1. The keystrokes: The number of keystrokes the player has made.
   2. Steps in each direction: The number of steps the player has made in each direction.
   3. Total rounds: The total number of rounds the player has played.
   4. Eaten apples: The number of apples the player has eaten.
@@ -61,6 +61,13 @@ Updated achievement Step Leftwards from two by 1.0
 Tue Nov 28 18:13:32 PST 2023
 Game ended
 ```
+## Phase 4: Task 3
+- ![UML Class Diagram](UML.png)  
+One design improvement I can think of is to adopt the *MVC design pattern*. Currently, I have the view and the model but without a controller. Therefore, the logic that handles the user input and responds to it are all in the `GameView` class. This can be identified by seeing that the `GameView` class implements all `ActionListener`, `KeyListener`, and `WindowListener` and has the `JFrame` object that shows the game window. This reduces the cohesion of the `GameView` class and makes it harder to maintain. 
+
+Therefore, I can create a controller class that handles the user input and responds to it. This will separate the responsibilities of displaying the game window and handling the user input to two different classes. The ideal MVC design of the game will consist of a model class that represents the game state, a view class that displays the game window and draw visual components, and a controller class that handles the user input and updates the game state and the view accordingly.
+
 ## Citations 
 1. [SnakeConsole-Lanterna](https://github.students.cs.ubc.ca/CPSC210/SnakeConsole-Lanterna)
 2. [JsonSerialization](https://github.students.cs.ubc.ca/CPSC210/JsonSerializationDemo)
+3. [EventLog](https://github.students.cs.ubc.ca/CPSC210/AlarmSystem)
